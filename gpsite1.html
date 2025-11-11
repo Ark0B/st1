@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSI SAU</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Three.js libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.min.js"></script>
+
+    <style>
+        /* ========================================
+        NAV STYLES
+        ========================================
+        */
+        
+        /* --- Base Nav Styles --- */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            height: 44px;
+            border-radius: 100px;
+            border: 1px solid rgba(128, 128, 128, 0.4); 
+        }
+
+        /* --- Background effects --- */
+        nav::after {
+            background: rgba(10, 10, 10, 0.5); 
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid white; 
+            z-index: -1;
+            border-radius: 100px;
+            opacity: 0.15;
+        }
+
+        nav::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid white;
+            z-index: 2;
+            border-radius: 100px;
+            pointer-events: none;
+        }
+
+        /* --- Fix for layout --- */
+        nav ul {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            height: 100%;
+            font-family: "Roboto", sans-serif; 
+            font-size: 1rem;                   
+            font-weight: 600; 
+        }
+
+        /* --- 'lit' list (the spotlight background) --- */
+        nav ul.lit {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            filter: url('#spotlight');
+        }
+
+        nav ul.lit li {
+            padding: 0.5rem 1.75rem; /* Spacing */
+        }
+
+        /* --- 'content' list (the clickable links) --- */
+        nav ul.content li {
+            height: 100%;
+            display: grid;
+            place-items: center;
+            position: relative; /* Added for indicator positioning */
+        }
+
+        nav ul.content li a {
+            display: grid;
+            place-items: center;
+            height: 100%;
+            padding: 0.5rem 1.75rem; /* Spacing */
+            text-decoration: none;
+            color: #ffffff; /* Text is white */
+            opacity: 0.75; /* Unselected items are 75% white */
+            transition: opacity 0.25s ease-out;
+            position: relative; /* Added for indicator positioning */
+        }
+
+        nav ul.content li a:is(:hover, :focus-visible) {
+            opacity: 1; /* Hovered items are 100% white */
+        }
+
+        nav ul.content li a span {
+            pointer-events: none;
+        }
+
+        /* --- Border effect for the content list --- */
+        nav ul.content::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 100px;
+            pointer-events: none;
+            border: 1px solid white;
+            filter: url('#ambience') brightness(2);
+        }
+
+        /* --- Style for the active/selected link --- */
+        [data-active='true'] {
+            opacity: 0.8; /* Active item is 80% white */
+        }
+
+        /* Filter effects for the nav */
+        nav::before,
+        nav::after,
+        nav ul.lit {
+            filter: url('#spotlight');
+        }
+
+        /* ========================================
+        GOLD INDICATOR STYLES
+        ========================================
+        */
+        /* 
+        EASY OFF-SWITCH: 
+        To disable the gold indicator, simply set the 'display' property to 'none' in the rule below.
+        Example: 
+          .gold-indicator { display: none; }
+        */
+        .gold-indicator {
+            
+            position: absolute;
+            top: 18px;
+            right: 14px;
+            width: 8px;
+            height: 8px;
+            background-color: #f5c837;
+            border-radius: 50%;
+            z-index: 1002;
+            pointer-events: none;
+            animation: pulse-gold 2s infinite;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.7);
+            
+            
+        }
+        
+
+        @keyframes pulse-gold {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+            }
+            70% {
+                transform: scale(1.23);
+                box-shadow: 0 0 0 4px rgba(212, 175, 55, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+        }
+
+        /* ========================================
+        REGISTER BUTTON STYLES
+        ========================================
+        */
+        #register-btn {
+            position: fixed;
+            top: 20px;
+            right: 40px; 
+            z-index: 1001; 
+            
+            height: 44px; 
+            padding: 0 1.75rem;
+            
+            font-family: "Roboto", sans-serif;
+            font-size: 1rem;
+            font-weight: 650;
+            
+            color: #D4AF37; /* Gold text */
+            background-color: transparent; /* Transparent background */
+            border: 2px solid #D4AF37; /* Gold border */
+            border-radius: 100px; 
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            text-decoration: none;
+            cursor: pointer;
+            
+            transition: all 0.2s ease-out;
+        }
+        
+        #register-btn:hover {
+            color: #FFD700; /* Brighter gold text on hover */
+            background-color: rgba(212, 175, 55, 0.05); /* Very subtle dark gold glow */
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); /* Soft gold shadow */
+            transform: scale(1.02); /* Slight scale up */
+        }
+
+        /* Click animation */
+        #register-btn.clicked {
+            transform: scale(0.98); /* Subtle press in */
+            opacity: 0.9;
+            transition: transform 0.1s ease;
+        }
+
+        /* ========================================
+        MODAL STYLES
+        ========================================
+        */
+        #modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7); 
+            z-index: 9998; 
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            opacity: 0;
+            visibility: hidden;
+            backdrop-filter: blur(5px);
+            
+            transition: opacity 0.3s ease, visibility 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        #modal-content {
+            position: relative;
+            background-color: #0a0f1a; 
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 2rem 2.5rem 2.5rem 2.5rem;
+            width: 90%;
+            max-width: 450px;
+            
+            border-top: 3px solid #D4AF37; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        #modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #modal-overlay.visible #modal-content {
+            opacity: 1;
+            transform: translateY(0); 
+        }
+        
+        .modal-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header .icon {
+            width: 40px;
+            height: 40px;
+            color: #D4AF37;
+            margin-bottom: 0.75rem;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-family: "Roboto", sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        #modal-content p {
+            font-size: 1.1rem;
+            text-align: center;
+            line-height: 1.6;
+            margin: 0;
+            font-weight: 300;
+            color: #cccccc; 
+        }
+        
+        #modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            
+            font-family: sans-serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #aaa;
+            
+            background: transparent;
+            border: none;
+            
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        
+        #modal-close-btn:hover {
+            color: #ffffff;
+            transform: rotate(90deg);
+        }
+
+        /* ========================================
+        END OF MODAL STYLES
+        ========================================
+        */
+
+
+        /* --- Basic Reset and Setup --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+            scrollbar-width: thin;
+            scrollbar-color: #3498db #0a0a0a;
+        }
+
+        body {
+            font-family: "Roboto", 'SF Pro Text', 'SF Pro Icons', 'AOS Icons', 'Helvetica Neue',
+                Helvetica, Arial, sans-serif, system-ui;
+            line-height: 1.6;
+            background-color: #000;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* ========================================
+        WEBKIT SCROLLBAR
+        ========================================
+        */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #3498db;
+            border-radius: 20px;
+            border: 2px solid #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #5dade2;
+        }
+        /* ========================================
+        END OF SCROLLBAR STYLES
+        ========================================
+        */
+
+
+        /* ========================================
+        LOADER STYLES
+        ========================================
+        */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000; 
+            z-index: 9999;
+            transition: opacity 1s ease-out, visibility 1s ease-out;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #binary-rain-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* ========================================
+        HERO & FULL SCREEN SECTION STYLES
+        ========================================
+        */
+
+        .full-screen-section {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 4rem;
+        }
+
+        /* --- Hero (Home) Section --- */
+        #home {
+            opacity: 0; /* Fades in via JS */
+            transition: opacity 1s ease-in;
+        }
+
+        #bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 0; 
+        }
+
+        .hero-content {
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 1;
+            font-family: "Roboto", sans-serif;
+            
+            /* === NEW: Prepare for GSAP animation === */
+            scale: 1;
+            opacity: 1;
+        }
+
+        .hero-content h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 4.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero-content p {
+            font-size: 1.75rem;
+            font-weight: 300;
+        }
+        
+        /* --- General Content Wrapper (for About, Team, etc.) --- */
+        .content-wrapper {
+            position: relative;
+            z-index: 3; /* Above logo and overlay */
+            text-align: center;
+            max-width: 800px;
+
+            /* === NEW: Prepare for GSAP animation === */
+            scale: 1;
+            opacity: 1;
+        }
+
+        /* Prominent Headers for all sections */
+        .full-screen-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+        
+        /* ========================================
+        UPDATED ABOUT US SECTION STYLES
+        ========================================
+        */
+        #about {
+            background-color: #0a0f1a; /* Dark blue background */
+            padding: 4rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Remove old watermark and overlay */
+        #about::before,
+        #about::after {
+            content: none;
+        }
+
+        /* Three.js wave background container */
+        #wave-background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        #wave-background {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .wave-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            text-align: right;
+            font-weight: 300;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            gap: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .about-logo-container {
+            flex: 0 0 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .about-logo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateX(-80px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-logo:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.5);
+        }
+
+        .about-text {
+            flex: 1;
+            text-align: left;
+            opacity: 0;
+            transform: translateX(80px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-text h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-align: left;
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-text h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #D4AF37);
+            border-radius: 2px;
+        }
+
+        .about-text p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #cccccc;
+            text-align: left;
+        }
+
+        .about-certificate-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(50px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-certificate-container h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .about-certificate {
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .about-certificate:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.5);
+        }
+
+        /* ========================================
+        RESPONSIVE STYLES
+        ========================================
+        */
+        @media (max-width: 992px) {
+            .about-top {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .about-logo-container {
+                flex: 0 0 auto;
+            }
+            
+            .about-text {
+                text-align: center;
+            }
+            
+            .about-text h2 {
+                text-align: center;
+            }
+            
+            .about-text h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .full-screen-section {
+                padding: 1rem 2rem;
+            }
+            
+            #about {
+                padding: 2rem 2rem;
+            }
+            
+            .about-content {
+                gap: 2rem;
+            }
+            
+            .about-logo {
+                max-width: 250px;
+            }
+            
+            .about-text h2 {
+                font-size: 2.5rem;
+            }
+            
+            .about-text p {
+                font-size: 1.1rem;
+            }
+            
+            .about-certificate-container h3 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .about-logo {
+                max-width: 200px;
+            }
+            
+            .about-text h2 {
+                font-size: 2rem;
+            }
+            
+            .about-text p {
+                font-size: 1rem;
+            }
+            
+            .about-certificate-container h3 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* --- Dummy Section Backgrounds --- */
+        .dark-bg { 
+            background-color: #0a0a0a; 
+            color: #fff;
+        }
+        .light-bg { 
+            background-color: #1a1a1a; 
+            color: #fff;
+        }
+
+        /* ========================================
+        REMOVED: Old SCROLL-TRIGGERED ANIMATIONS
+        ========================================
+        */
+        
+        /* All '.is-visible' and related styles have been removed.
+           GSAP now handles this.
+        */
+        
+        /* ========================================
+        SCROLL DOWN ARROW
+        ========================================
+        */
+        .scroll-down-arrow-link {
+            position: absolute;
+            bottom: 30px; 
+            left: 50%;
+            z-index: 1;
+            animation: bob 2s infinite ease-in-out; 
+            transform: translateX(-50%); 
+        }
+
+        .scroll-down-arrow {
+            color: #3498db; 
+            width: 36px;
+            height: 36px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes bob {
+            0% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px); 
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                filter: drop-shadow(0 0 3px rgba(52, 152, 219, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.9));
+            }
+            100% {
+                filter: drop-shadow(0 0 3px rgba(52, 152, 219, 0.4));
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <canvas id="binary-rain-canvas"></canvas>
+    </div>
+
+    <nav>
+        <ul aria-hidden="true" class="lit">
+            <li>Home</li>
+            <li>About</li>
+            <li>Team</li>
+            <li>Events</li>
+            <li>Contact</li>
+        </ul>
+        <ul class="content">
+            <li>
+                <a data-active="true" href="#home"><span>Home</span></a>
+            </li>
+            <li>
+                <a href="#about"><span>About</span></a>
+            </li>
+            <li>
+                <a href="#team"><span>Team</span></a>
+            </li>
+            <li>
+                <a href="#events"><span>Events</span>
+                    <!-- GOLD INDICATOR -->
+                    <div class="gold-indicator"></div>
+                </a>
+            </li>
+            <li>
+                <a href="#contact"><span>Contact</span></a>
+            </li>
+        </ul>
+    </nav>
+
+    <a id="register-btn">
+        <span>REGISTER</span>
+    </a>
+
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <button id="modal-close-btn">&times;</button>
+            <div class="modal-header">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                </svg>
+                <h3>Registrations Closed</h3>
+            </div>
+            <p>We are not accepting new registrations at this time. Please follow our social channels for updates on our next membership drive!</p>
+        </div>
+    </div>
+
+    <section id="home" class="full-screen-section">
+
+        <video id="bg-video" autoplay loop muted playsinline>
+            <source src="https://cdn.pixabay.com/video/2019/10/10/27725-365890983_large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="video-overlay"></div>
+
+        <div class="hero-content">
+            <h1>THIS IS CSI SAU</h1>
+            <p>The algorithm behind innovation</p>
+        </div>
+
+        <a href="#about" class="scroll-down-arrow-link">
+            <svg class="scroll-down-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+        </a>
+
+    </section>
+
+    <section id="about" class="full-screen-section">
+        <!-- Three.js wave background container -->
+        <div id="wave-background-container">
+            <canvas id="wave-background"></canvas>
+            <div class="wave-info"></div>
+        </div>
+        
+        <div class="about-content">
+            <div class="about-top">
+                <div class="about-logo-container">
+                    <img src="csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
+                </div>
+                <div class="about-text">
+                    <h2>About Us</h2>
+                    <p>
+                        The Computer Society of India (CSI) is the first and largest body of computer professionals in India. It was started on 6 March 1965 by a few computer professionals and has now grown to be the national body representing computer professionals, with 72 chapters, 511 student branches, and over 100,000 members. The purposes of the Society are scientific and educational, directed towards the advancement of the theory and practice of computer science and IT.
+                    </p>
+                </div>
+            </div>
+            <div class="about-certificate-container">
+                <h3>Official Recognition</h3>
+                <img src="certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
+            </div>
+        </div>
+    </section>
+
+    <section id="team" class="full-screen-section dark-bg">
+        <div class="content-wrapper">
+            <h2>Our Team</h2>
+            <p>Content for the team section will go here.</p>
+        </div>
+    </section>
+    
+    <section id="events" class="full-screen-section light-bg">
+        <div class="content-wrapper">
+            <h2>Events</h2>
+            <p>Content for the events section will go here.</p>
+        </div>
+    </section>
+    
+    <section id="contact" class="full-screen-section dark-bg">
+        <div class="content-wrapper">
+            <h2>Contact</h2>
+            <p>Content for the contact section will go here.</p>
+        </div>
+    </section>
+
+    <svg class="sr-only">
+        <filter id="spotlight">
+            <feGaussianBlur
+                in="SourceAlpha"
+                stdDeviation="3"
+                result="blur"
+            ></feGaussianBlur>
+            <feSpecularLighting
+                result="lighting"
+                in="blur"
+                surfaceScale="5"
+                specularConstant="0.5"
+                specularExponent="120"
+                lighting-color="#ffffff"
+            >
+                <fePointLight x="50" y="50" z="300"></fePointLight>
+            </feSpecularLighting>
+            <feComposite
+                in="lighting"
+                in2="SourceAlpha"
+                operator="in"
+                result="composite"
+            ></feComposite>
+            <feComposite
+                in="merged"
+                in2="composite"
+                operator="arithmetic"
+                k1="0"
+                k2="1"
+                k3="1"
+                k4="0"
+                result="litPaint"
+            ></feComposite>
+        </filter>
+        <filter id="ambience">
+            <feGaussianBlur
+                in="SourceAlpha"
+                stdDeviation="3"
+                result="blur"
+            ></feGaussianBlur>
+            <feSpecularLighting
+                result="lighting"
+                in="blur"
+                surfaceScale="5"
+                specularConstant="0.5"
+                specularExponent="120"
+                lighting-color="#ffffff"
+            >
+                <fePointLight x="50" y="50" z="300"></fePointLight>
+            </feSpecularLighting>
+            <feComposite
+                in="lighting"
+                in2="SourceAlpha"
+                operator="in"
+                result="composite"
+            ></feComposite>
+            <feComposite
+                in="merged"
+                in2="composite"
+                operator="arithmetic"
+                k1="0"
+                k2="1"
+                k3="1"
+                k4="0"
+                result="litPaint"
+            ></feComposite>
+        </filter>
+    </svg>
+
+
+    <script>
+        // --- Binary Rain Animation Logic ---
+        const canvas = document.getElementById('binary-rain-canvas');
+        const ctx = canvas.getContext('2d');
+        let rainInterval; 
+
+        function startRain() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const fontSize = 12;
+            const columns = Math.floor(canvas.width / fontSize);
+            const drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+            }
+            function drawBinaryRain() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#3498db';
+                ctx.font = fontSize + 'px monospace';
+                for (let i = 0; i < drops.length; i++) {
+                    const text = (Math.random() < 0.5) ? '0' : '1';
+                    const x = i * fontSize;
+                    const y = drops[i] * fontSize;
+                    ctx.fillText(text, x, y);
+                    if (y > canvas.height && Math.random() > 0.985) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            rainInterval = setInterval(drawBinaryRain, 33); 
+        }
+
+        // --- Page Load and Scroll Lock Logic ---
+        window.onload = () => {
+            const loader = document.getElementById('loader');
+            const hero = document.getElementById('home'); 
+
+            /* === Scroll Lock === */
+            const scrollY = window.scrollY; 
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            document.body.style.top = `-${scrollY}px`;
+
+            // 1. Start rain
+            startRain();
+            
+            // 2. Set up sequence
+            const animationDuration = 980; 
+            const fadeDuration = 1000;      
+                                            
+            // 3. Start crossfade
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                hero.style.opacity = '1';
+
+                // 4. Cleanup after fade
+                setTimeout(() => {
+                    clearInterval(rainInterval);
+                    loader.style.display = 'none';
+                    
+                    /* === Scroll Unlock === */
+                    document.body.style.position = '';
+                    document.body.style.width = '';
+                    document.body.style.top = '';
+                    
+                    window.scrollTo(0, scrollY); 
+                    
+                    if (window.runNavUpdate) {
+                        window.runNavUpdate();
+                    }
+                    
+                }, fadeDuration);
+
+            }, animationDuration);
+        };
+    </script>
+
+    <script type="module">
+        // Import GSAP and the ScrollTrigger plugin
+        import gsap from 'https://cdn.skypack.dev/gsap@3.12.0'
+        import { ScrollTrigger } from 'https://cdn.skypack.dev/gsap@3.12.0/ScrollTrigger'
+        
+        // Register the plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        /* ================
+        NAVBAR LOGIC
+        ================
+        */
+        const config = {
+            spotlight: {
+                speed: 0.25,
+                deviation: 0.8,
+                surface: 0.5,
+                specular: 8,
+                exponent: 65,
+                light: 'hsla(0, 0%, 100%, 0.7)',
+                x: 0,
+                y: 54,
+                z: 82,
+                pointer: false,
+            },
+            ambience: {
+                deviation: 0.8,
+                surface: 0.5,
+                specular: 25,
+                exponent: 65,
+                light: 'hsla(0, 0%, 100%, 0.4)',
+                x: 120,
+                y: -154,
+                z: 160,
+            },
+        }
+
+        const nav = document.querySelector('nav')
+        const links = nav.querySelectorAll('a')
+        const spotlightfeGaussianBlur = document.querySelector(
+            '#spotlight feGaussianBlur'
+        )
+        const spotlightfeSpecularLighting = document.querySelector(
+            '#spotlight feSpecularLighting'
+        )
+        const spotlightfePointLight = document.querySelector('#spotlight fePointLight')
+        const ambiencefeGaussianBlur = document.querySelector(
+            '#ambience feGaussianBlur'
+        )
+        const ambiencefeSpecularLighting = document.querySelector(
+            '#ambience feSpecularLighting'
+        )
+        const ambiencefePointLight = document.querySelector('#ambience fePointLight')
+
+        const syncLight = ({ x, y }) => {
+            const navBounds = nav.getBoundingClientRect()
+            spotlightfePointLight.setAttribute('x', Math.floor(x - navBounds.x))
+            spotlightfePointLight.setAttribute('y', Math.floor(y - navBounds.y))
+        }
+        let monitoring = false
+        
+        const update = window.runNavUpdate = () => {
+            
+            setTimeout(() => {
+                // set spotlight
+                spotlightfeGaussianBlur.setAttribute(
+                    'stdDeviation',
+                    config.spotlight.deviation
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'surfaceScale',
+                    config.spotlight.surface
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'specularConstant',
+                    config.spotlight.specular
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'specularExponent',
+                    config.spotlight.exponent
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'lighting-color',
+                    config.spotlight.light
+                )
+                // set ambience
+                ambiencefeGaussianBlur.setAttribute('stdDeviation', config.ambience.deviation)
+                ambiencefeSpecularLighting.setAttribute(
+                    'surfaceScale',
+                    config.ambience.surface
+                )
+                ambiencefeSpecularLighting.setAttribute(
+                    'specularConstant',
+                    config.ambience.specular
+                )
+                ambiencefeSpecularLighting.setAttribute(
+                    'specularExponent',
+                    config.ambience.exponent
+                )
+                ambiencefeSpecularLighting.setAttribute(
+                    'lighting-color',
+                    config.ambience.light
+                )
+                const anchor = document.querySelector('[data-active="true"]')
+                if (!anchor) return; 
+
+                const navBounds = nav.getBoundingClientRect()
+                const anchorBounds = anchor.getBoundingClientRect()
+
+                spotlightfePointLight.setAttribute(
+                    'x',
+                    anchorBounds.left -
+                        navBounds.left +
+                        anchorBounds.width * 0.5 +
+                        config.spotlight.x
+                )
+                spotlightfePointLight.setAttribute('y', config.spotlight.y)
+                spotlightfePointLight.setAttribute('z', config.spotlight.z)
+
+                ambiencefePointLight.setAttribute('x', config.ambience.x)
+                ambiencefePointLight.setAttribute('y', config.ambience.y)
+                ambiencefePointLight.setAttribute('z', config.ambience.z)
+
+                if (config.spotlight.pointer && !monitoring) {
+                    monitoring = true
+                    nav.dataset.pointerLighting = true
+                    window.addEventListener('pointermove', syncLight)
+                } else if (!config.spotlight.pointer) {
+                    monitoring = false
+                    nav.dataset.pointerLighting = false
+                    window.removeEventListener('pointermove', syncLight)
+                }
+                
+                // === NEW: Run scroll animations *after* nav is set up ===
+                setupScrollAnimations();
+                
+            }, 0); 
+        }
+
+        const selectAnchor = (anchor) => {
+            if (!config.pointer) {
+                const navBounds = nav.getBoundingClientRect()
+                const anchorBounds = anchor.getBoundingClientRect()
+                for (const link of links) link.dataset.active = anchor === link
+                gsap.to(spotlightfePointLight, {
+                    duration: config.spotlight.speed,
+                    attr: {
+                        x:
+                            anchorBounds.left -
+                            navBounds.left +
+                            anchorBounds.width * 0.5 +
+                            config.spotlight.x,
+                    },
+                })
+            }
+        }
+
+        nav.addEventListener('click', (event) => {
+            if (event.target.tagName === 'A') selectAnchor(event.target)
+        })
+
+        /* ================
+        NEW: SCROLL ANIMATION LOGIC
+        ================
+        */
+        function setupScrollAnimations() {
+            // 1. Animate the Hero content OUT
+            gsap.to("#home .hero-content", {
+                scrollTrigger: {
+                    trigger: "#home",
+                    start: "top top",
+                    end: "bottom center", 
+                    scrub: true, 
+                },
+                scale: 0.8, 
+                opacity: 0, 
+                ease: "power1.in"
+            });
+        
+            // 2. Animate all other sections
+            const sections = document.querySelectorAll('.full-screen-section');
+            
+            sections.forEach((section, index) => {
+                
+                // === This is the existing animation code ===
+                const content = section.querySelector('.content-wrapper');
+                
+                if (index > 0 && content) { // Only run these on non-hero sections
+                    // 2a. Animate content IN
+                    gsap.from(content, {
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top 80%", 
+                            end: "top 40%",
+                            scrub: true,
+                        },
+                        scale: 0.8,
+                        opacity: 0,
+                        ease: "power1.out"
+                    });
+            
+                    // 2b. Animate content OUT
+                    gsap.to(content, {
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "bottom bottom", 
+                            end: "bottom top",
+                            scrub: true,
+                        },
+                        scale: 0.8,
+                        opacity: 0,
+                        ease: "power1.in"
+                    });
+                }
+                
+                
+                const link = document.querySelector(`nav ul.content li a[href="#${section.id}"]`);
+
+                if (link) {
+                    ScrollTrigger.create({
+                        trigger: section,
+                        start: "top 50%",   
+                        end: "bottom 50%", 
+                        
+                       
+                        onEnter: () => selectAnchor(link), 
+                        onEnterBack: () => selectAnchor(link), //moves navbar selection along while scrolling
+                    });
+                }
+                
+            });
+
+            // NEW: About section animations
+            const aboutSection = document.getElementById('about');
+            const aboutLogo = document.querySelector('.about-logo');
+            const aboutText = document.querySelector('.about-text');
+            const aboutCertificate = document.querySelector('.about-certificate-container');
+
+            // Professional animations with subtle effects
+            gsap.to(aboutLogo, {
+                scrollTrigger: {
+                    trigger: aboutSection,
+                    start: "top 85%",
+                    end: "top 30%",
+                    scrub: true,
+                },
+                opacity: 1,
+                x: 0,
+                duration: 1.2,
+                ease: "power2.out"
+            });
+
+            gsap.to(aboutText, {
+                scrollTrigger: {
+                    trigger: aboutSection,
+                    start: "top 85%",
+                    end: "top 30%",
+                    scrub: true,
+                },
+                opacity: 1,
+                x: 0,
+                duration: 1.2,
+                ease: "power2.out",
+                delay: 0.2
+            });
+
+            // Certificate animation with subtle glow
+            gsap.to(aboutCertificate, {
+                scrollTrigger: {
+                    trigger: aboutSection,
+                    start: "top 70%",
+                    end: "top 10%",
+                    scrub: true,
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: "power2.out",
+                delay: 0.4
+            });
+
+            // Add subtle glow effect to certificate
+            gsap.to(".about-certificate", {
+                scrollTrigger: {
+                    trigger: aboutSection,
+                    start: "top 50%",
+                    end: "bottom 50%",
+                    scrub: true,
+                },
+                boxShadow: "0 0 30px rgba(212, 175, 55, 0.4)",
+                duration: 2,
+                yoyo: true,
+                repeat: 1
+            });
+        }
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- MODAL LOGIC ---
+            const registerBtn = document.getElementById('register-btn');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            const openModal = () => {
+                registerBtn.classList.add('clicked');
+                setTimeout(() => {
+                    modalOverlay.classList.add('visible');
+                    registerBtn.classList.remove('clicked'); 
+                }, 150); 
+            };
+
+            const closeModal = () => {
+                modalOverlay.classList.remove('visible');
+            };
+
+            registerBtn.addEventListener('click', openModal);
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (event) => {
+                if (event.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modalOverlay.classList.contains('visible')) {
+                    closeModal();
+                }
+            });
+
+            // --- THREE.JS WAVE BACKGROUND FOR ABOUT SECTION ---
+            function initWaveBackground() {
+                // Configuration with refined blue color theme
+                const config = {
+                    el: 'wave-background',
+                    fov: 75,
+                    cameraZ: 75,
+                    xyCoef: 60, // Higher value = smoother waves
+                    zCoef: 12,  // Moderate wave height
+                    lightIntensity: 0.8,
+                    // Refined blue palette
+                    light1Color: 0x0A1A4A, // Deep navy
+                    light2Color: 0x1A2B5A, // Dark blue
+                    light3Color: 0x2A3B6A, // Medium blue
+                    light4Color: 0x3A4B7A, // Soft blue
+                    planeColor: 0x1A2B5A
+                };
+
+                let renderer, scene, camera;
+                let width, height, wWidth, wHeight;
+                let plane;
+                const simplex = new SimplexNoise();
+
+                // Smoother mouse tracking variables
+                const mouse = new THREE.Vector2();
+                const targetMouse = new THREE.Vector2();
+
+                // Initialize Three.js
+                function initThree() {
+                    const container = document.getElementById('wave-background-container');
+                    width = container.clientWidth;
+                    height = container.clientHeight;
+                    
+                    renderer = new THREE.WebGLRenderer({ 
+                        canvas: document.getElementById(config.el), 
+                        antialias: true, 
+                        alpha: false 
+                    });
+                    renderer.setClearColor(0x000000);
+                    renderer.setSize(width, height);
+                    
+                    camera = new THREE.PerspectiveCamera(config.fov, width / height);
+                    camera.position.z = config.cameraZ;
+
+                    updateSize();
+                    window.addEventListener('resize', updateSize, false);
+
+                    // Smooth mouse move listener for subtle interaction
+                    document.addEventListener('mousemove', e => {
+                        // Update target mouse position
+                        targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+                        targetMouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
+                    });
+
+                    initScene();
+                    animate();
+                }
+
+                function initScene() {
+                    scene = new THREE.Scene();
+                    initLights();
+
+                    // Create the animated plane with balanced segments for smooth waves
+                    let material = new THREE.MeshLambertMaterial({ 
+                        color: config.planeColor, 
+                        side: THREE.DoubleSide,
+                        wireframe: false
+                    });
+                    
+                    // Balanced geometry resolution for smooth waves
+                    let geometry = new THREE.PlaneBufferGeometry(wWidth, wHeight, wWidth / 2, wHeight / 2);
+                    plane = new THREE.Mesh(geometry, material);
+                    scene.add(plane);
+
+                    // Position the plane
+                    plane.rotation.x = -Math.PI / 2 - 0.2;
+                    plane.position.y = -25;
+                    camera.position.z = 60;
+                }
+
+                function initLights() {
+                    const r = 30;
+                    const y = 10;
+                    const lightDistance = 500;
+
+                    // Create subtle point lights with refined blue colors
+                    const light1 = new THREE.PointLight(config.light1Color, config.lightIntensity, lightDistance);
+                    light1.position.set(0, y, r);
+                    scene.add(light1);
+                    
+                    const light2 = new THREE.PointLight(config.light2Color, config.lightIntensity, lightDistance);
+                    light2.position.set(0, -y, -r);
+                    scene.add(light2);
+                    
+                    const light3 = new THREE.PointLight(config.light3Color, config.lightIntensity, lightDistance);
+                    light3.position.set(r, y, 0);
+                    scene.add(light3);
+                    
+                    const light4 = new THREE.PointLight(config.light4Color, config.lightIntensity, lightDistance);
+                    light4.position.set(-r, y, 0);
+                    scene.add(light4);
+                }
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    
+                    // Smoothly interpolate mouse position for less jerky movement
+                    mouse.lerp(targetMouse, 0.05);
+                    
+                    animatePlane();
+                    animateLights();
+                    renderer.render(scene, camera);
+                }
+
+                function animatePlane() {
+                    const gArray = plane.geometry.attributes.position.array;
+                    const time = Date.now() * 0.00008; // Very slow animation
+                    
+                    for (let i = 0; i < gArray.length; i += 3) {
+                        // Use smooth noise with less variation
+                        const x = gArray[i] / config.xyCoef;
+                        const y = gArray[i + 1] / config.xyCoef;
+                        
+                        // Single, smooth wave with subtle mouse influence
+                        let noise = simplex.noise3D(
+                            x + time, 
+                            y + time, 
+                            mouse.x * 0.3 + mouse.y * 0.3 // Reduced mouse influence
+                        );
+                        
+                        gArray[i + 2] = noise * config.zCoef;
+                    }
+                    
+                    plane.geometry.attributes.position.needsUpdate = true;
+                    plane.geometry.computeVertexNormals();
+                }
+
+                function animateLights() {
+                    const time = Date.now() * 0.0002; // Very slow light movement
+                    const d = 30; // Reduced movement range
+                    
+                    // Get lights from scene
+                    const lights = scene.children.filter(child => child instanceof THREE.PointLight);
+                    
+                    if (lights.length >= 4) {
+                        // Very subtle, slow light movements
+                        lights[0].position.x = Math.sin(time * 0.1) * d;
+                        lights[0].position.z = Math.cos(time * 0.15) * d;
+                        
+                        lights[1].position.x = Math.cos(time * 0.12) * d;
+                        lights[1].position.z = Math.sin(time * 0.18) * d;
+                        
+                        lights[2].position.x = Math.sin(time * 0.14) * d;
+                        lights[2].position.z = Math.sin(time * 0.16) * d;
+                        
+                        lights[3].position.x = Math.sin(time * 0.16) * d;
+                        lights[3].position.z = Math.cos(time * 0.12) * d;
+                    }
+                }
+
+                function updateSize() {
+                    const container = document.getElementById('wave-background-container');
+                    width = container.clientWidth;
+                    height = container.clientHeight;
+                    
+                    if (renderer && camera) {
+                        renderer.setSize(width, height);
+                        camera.aspect = width / height;
+                        camera.updateProjectionMatrix();
+                        
+                        const wsize = getRendererSize();
+                        wWidth = wsize[0];
+                        wHeight = wsize[1];
+                    }
+                }
+
+                function getRendererSize() {
+                    const cam = new THREE.PerspectiveCamera(camera.fov, camera.aspect);
+                    const vFOV = cam.fov * Math.PI / 180;
+                    const height = 2 * Math.tan(vFOV / 2) * Math.abs(config.cameraZ);
+                    const width = height * cam.aspect;
+                    return [width, height];
+                }
+
+                // Start the application
+                initThree();
+            }
+
+            // Initialize wave background when the page loads
+            initWaveBackground();
+        });
+    </script>
+
+</body>
+</html>
