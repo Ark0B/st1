@@ -1450,7 +1450,42 @@
         RESPONSIVE STYLES
         ========================================
         */
+        
+        /* Tablet and below (992px and down) */
         @media (max-width: 992px) {
+            /* Navigation adjustments */
+            nav {
+                top: 15px;
+                height: 40px;
+            }
+            
+            nav ul.content li a {
+                padding: 0.4rem 1.25rem;
+                font-size: 0.9rem;
+            }
+            
+            nav ul.lit li {
+                padding: 0.4rem 1.25rem;
+            }
+            
+            #register-btn {
+                top: 15px;
+                right: 30px;
+                height: 40px;
+                padding: 0 1.25rem;
+                font-size: 0.9rem;
+            }
+            
+            /* Hero section */
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.5rem;
+            }
+            
+            /* About section */
             .about-top {
                 flex-direction: column;
                 gap: 2rem;
@@ -1472,7 +1507,12 @@
                 left: 50%;
                 transform: translateX(-50%);
             }
+            
+            .about-text p {
+                text-align: center;
+            }
 
+            /* Team section */
             .team-row {
                 gap: 1.5rem;
             }
@@ -1484,13 +1524,65 @@
             .team-modal-body {
                 grid-template-columns: 1fr;
             }
+            
+            /* Full screen sections */
+            .full-screen-section h2 {
+                font-size: 3rem;
+            }
         }
 
+        /* Small tablets and large phones (768px and down) */
         @media (max-width: 768px) {
+            /* Navigation - make it more compact */
+            nav {
+                top: 10px;
+                height: 36px;
+                font-size: 0.85rem;
+            }
+            
+            nav ul.content li a {
+                padding: 0.3rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            nav ul.lit li {
+                padding: 0.3rem 1rem;
+            }
+            
+            #register-btn {
+                top: 10px;
+                right: 20px;
+                height: 36px;
+                padding: 0 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .gold-indicator {
+                top: 14px;
+                right: 10px;
+                width: 6px;
+                height: 6px;
+            }
+            
+            /* Hero section */
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+            
+            /* General spacing */
             .full-screen-section {
                 padding: 1rem 2rem;
             }
             
+            .full-screen-section h2 {
+                font-size: 2.5rem;
+            }
+            
+            /* About section */
             #about {
                 padding: 2rem 2rem;
             }
@@ -1515,8 +1607,10 @@
                 font-size: 1.8rem;
             }
 
+            /* Team section */
             .team-cards-container {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
             }
 
             .team-category h3 {
@@ -1530,9 +1624,81 @@
             .team-modal-body {
                 padding: 1.5rem;
             }
+            
+            /* Modal adjustments */
+            #modal-content {
+                padding: 1.5rem 2rem 2rem 2rem;
+                width: 85%;
+            }
+            
+            .modal-header h3 {
+                font-size: 1.3rem;
+            }
+            
+            #modal-content p {
+                font-size: 1rem;
+            }
         }
 
+        /* Mobile devices (576px and down) */
         @media (max-width: 576px) {
+            /* Navigation - stack or hide some items */
+            nav {
+                top: 10px;
+                height: auto;
+                min-height: 36px;
+                max-width: calc(100% - 100px);
+            }
+            
+            nav ul.content li a {
+                padding: 0.3rem 0.75rem;
+                font-size: 0.75rem;
+            }
+            
+            nav ul.lit li {
+                padding: 0.3rem 0.75rem;
+            }
+            
+            #register-btn {
+                top: 10px;
+                right: 15px;
+                height: 36px;
+                padding: 0 0.85rem;
+                font-size: 0.75rem;
+            }
+            
+            .gold-indicator {
+                top: 14px;
+                right: 8px;
+                width: 5px;
+                height: 5px;
+            }
+            
+            /* Hero section */
+            .hero-content h1 {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            /* General spacing */
+            .full-screen-section {
+                padding: 1rem 1rem;
+            }
+            
+            .full-screen-section h2 {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+            
+            /* About section */
+            #about {
+                padding: 2rem 1rem;
+            }
+            
             .about-logo {
                 max-width: 200px;
             }
@@ -1543,28 +1709,86 @@
             
             .about-text p {
                 font-size: 1rem;
+                line-height: 1.6;
             }
             
             .about-certificate-container h3 {
                 font-size: 1.5rem;
             }
+            
+            .about-certificate {
+                max-width: 100%;
+            }
 
+            /* Team section */
+            #team {
+                padding: 2rem 1rem;
+            }
+            
             .team-cards-container {
                 grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+            
+            .team-card {
+                height: 320px;
             }
 
             .team-row {
                 flex-direction: column;
                 align-items: center;
+                gap: 1.25rem;
             }
 
             .leadership-card {
                 width: 100%;
                 max-width: 300px;
             }
+            
+            .team-category h3 {
+                font-size: 1.75rem;
+            }
+
+            /* Modal adjustments */
+            #modal-content {
+                padding: 1.25rem 1.5rem 1.5rem 1.5rem;
+                width: 90%;
+                max-width: 100%;
+            }
+            
+            .modal-header {
+                margin-bottom: 1rem;
+            }
+            
+            .modal-header .icon {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .modal-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            #modal-content p {
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+            
+            .team-modal-content {
+                width: 95%;
+                max-width: 100%;
+            }
 
             .team-modal-header {
                 padding: 1.5rem;
+            }
+            
+            .team-modal-header h2 {
+                font-size: 1.75rem;
+            }
+            
+            .team-modal-header p {
+                font-size: 0.95rem;
             }
 
             .team-modal-body {
@@ -1574,6 +1798,66 @@
             .team-leader {
                 flex-direction: column;
                 text-align: center;
+                padding: 0.75rem;
+            }
+            
+            .team-leader-img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .team-leader-info h4 {
+                font-size: 1rem;
+            }
+            
+            .members-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .member-item {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Very small mobile devices (400px and down) */
+        @media (max-width: 400px) {
+            nav {
+                max-width: calc(100% - 90px);
+            }
+            
+            nav ul.content li a {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.7rem;
+            }
+            
+            nav ul.lit li {
+                padding: 0.3rem 0.6rem;
+            }
+            
+            #register-btn {
+                padding: 0 0.75rem;
+                font-size: 0.7rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.75rem;
+            }
+            
+            .hero-content p {
+                font-size: 0.9rem;
+            }
+            
+            .full-screen-section h2 {
+                font-size: 1.75rem;
+            }
+            
+            .about-text h2 {
+                font-size: 1.75rem;
+            }
+            
+            .team-category h3 {
+                font-size: 1.5rem;
             }
         }
         
