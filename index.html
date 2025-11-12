@@ -8,10 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
     
     <!-- Three.js libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.min.js"></script>
+    
+    <!-- Anime.js for button animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
     <style>
         /* ========================================
@@ -630,7 +634,7 @@
             left: 0;
             width: 100px;
             height: 3px;
-            background: linear-gradient(90deg, #3498db, #D4AF37);
+            background: #3498db; /* Changed to solid blue */
             border-radius: 2px;
         }
 
@@ -676,6 +680,773 @@
         }
 
         /* ========================================
+        TEAM SECTION STYLES
+        ========================================
+        */
+        #team {
+            background-color: #0a0a0a;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+
+        .team-container {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .team-category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .team-category h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #ffffff;
+            text-align: center;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .team-category h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: #3498db; /* Changed to solid blue */
+            border-radius: 2px;
+        }
+
+        .team-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        /* Leadership Card Styles */
+        .leadership-card {
+            width: 280px;
+            height: 380px;
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .leadership-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(52, 152, 219, 0.2);
+        }
+
+        .leadership-img {
+            width: 100%;
+            height: 200px;
+            background-color: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .leadership-img-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #3498db, #D4AF37);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .leadership-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .leadership-info h4 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .leadership-info p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            color: #cccccc;
+            margin-bottom: 1rem;
+        }
+
+        /* LinkedIn Icon Styles */
+        .linkedin-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #0077b5;
+            color: white;
+            text-decoration: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .linkedin-icon:hover {
+            background-color: #005885;
+            transform: scale(1.1);
+        }
+
+        /* Team Cards Styles (Based on the provided prototype) */
+        .team-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            padding: 1rem;
+            width: 100%;
+            height: 350px;
+            text-align: center;
+            color: whitesmoke;
+            background-color: whitesmoke;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1), 
+                0 2px 2px rgba(0,0,0,0.1), 
+                0 4px 4px rgba(0,0,0,0.1), 
+                0 8px 8px rgba(0,0,0,0.1),
+                0 16px 16px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 110%;
+            background-size: cover;
+            background-position: 0 0;
+            transition: transform 1050ms cubic-bezier(0.19, 1, 0.22, 1);
+            pointer-events: none;
+            border-radius: 10px;
+        }
+
+        .team-card::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            pointer-events: none;
+            background-image: linear-gradient(
+                to bottom,
+                hsla(0, 0%, 0%, 0) 0%,
+                hsla(0, 0%, 0%, 0.009) 11.7%,
+                hsla(0, 0%, 0%, 0.034) 22.1%,
+                hsla(0, 0%, 0%, 0.072) 31.2%,
+                hsla(0, 0%, 0%, 0.123) 39.4%,
+                hsla(0, 0%, 0%, 0.182) 46.6%,
+                hsla(0, 0%, 0%, 0.249) 53.1%,
+                hsla(0, 0%, 0%, 0.320) 58.9%,
+                hsla(0, 0%, 0%, 0.394) 64.3%,
+                hsla(0, 0%, 0%, 0.468) 69.3%,
+                hsla(0, 0%, 0%, 0.540) 74.1%,
+                hsla(0, 0%, 0%, 0.607) 78.8%,
+                hsla(0, 0%, 0%, 0.668) 83.6%,
+                hsla(0, 0%, 0%, 0.721) 88.7%,
+                hsla(0, 0%, 0%, 0.762) 94.1%,
+                hsla(0, 0%, 0%, 0.790) 100%
+            );
+            transform: translateY(-50%);
+            transition: transform 1400ms cubic-bezier(0.19, 1, 0.22, 1);
+            border-radius: 10px;
+        }
+
+        /* Team-specific background images */
+        .team-card.technical::before {
+            background-image: url(https://images.unsplash.com/photo-1517021897933-0e0319cfbc28?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+        }
+
+        .team-card.research::before {
+            background-image: url(https://images.unsplash.com/photo-1533903345306-15d1c30952de?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+        }
+
+        .team-card.finance::before {
+            background-image: url(https://images.unsplash.com/photo-1545243424-0ce743321e11?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+        }
+
+        .team-card.design::before {
+            background-image: url(https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+        }
+
+        .team-card.pr::before {
+            background-image: url(https://images.unsplash.com/photo-1551836026-d5c8c2c4228c?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+        }
+
+        .team-card.events::before {
+            background-image: url(https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+        }
+
+        .team-card.documentation-outreach::before {
+            background-image: url(https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+        }
+
+        .team-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 1rem;
+            transition: transform 700ms cubic-bezier(0.19, 1, 0.22, 1);
+            z-index: 1;
+        }
+
+        .team-content > * + * {
+            margin-top: 1rem;
+        }
+
+        .team-title {
+            font-size: 1.2rem; /* Smaller font size to fit team names */
+            font-weight: bold;
+            line-height: 1.2;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        /* New Explore Button Styles */
+        .explore-container {
+            align-items: center;
+            border-radius: 26px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
+                0 4px 4px rgba(0, 0, 0, 0.11), 0 6px 8px rgba(0, 0, 0, 0.11),
+                0 8px 16px rgba(0, 0, 0, 0.11);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            height: 52px;
+            width: 150px;
+            margin-top: 1.5rem;
+        }
+
+        .explore-bottom {
+            border-radius: 26px;
+            background: #eabbbb;
+            height: 100%;
+            overflow: hidden;
+            position: absolute;
+            width: 100%;
+        }
+
+        .explore-cover {
+            background-color: #3743a4;
+            border-radius: 26px;
+            height: 100%;
+            position: absolute;
+            width: 100%;
+        }
+        .explore-cut {
+            clip-path: polygon(
+                100% 0%,
+                99.73714% -0.13875%,
+                98.96737% -0.53964%,
+                97.71887% -1.17957%,
+                96.01985% -2.03547%,
+                93.89849% -3.08428%,
+                91.38299% -4.30291%,
+                88.50154% -5.66829%,
+                85.28234% -7.15734%,
+                81.75358% -8.74699%,
+                77.94346% -10.41416%,
+                73.88016% -12.13578%,
+                69.59189% -13.88876%,
+                65.10683% -15.65005%,
+                60.45319% -17.39655%,
+                55.65915% -19.10519%,
+                50.75291% -20.75291%,
+                45.76266% -22.31661%,
+                40.7166% -23.77324%,
+                35.64292% -25.09971%,
+                30.56981% -26.27294%,
+                25.52548% -27.26986%,
+                20.5381% -28.0674%,
+                15.63589% -28.64248%,
+                10.84702% -28.97202%,
+                6.1997% -29.03295%,
+                1.72212% -28.8022%,
+                -2.55753% -28.25668%,
+                -6.61106% -27.37332%,
+                -10.41026% -26.12905%,
+                -13.92694% -24.50079%,
+                -17.13292% -22.46546%,
+                -20% -20%,
+                -22.46546% -17.13292%,
+                -24.50079% -13.92694%,
+                -26.12905% -10.41026%,
+                -27.37332% -6.61106%,
+                -28.25668% -2.55753%,
+                -28.8022% 1.72212%,
+                -29.03295% 6.1997%,
+                -28.97202% 10.84702%,
+                -28.64248% 15.63589%,
+                -28.0674% 20.5381%,
+                -27.26986% 25.52548%,
+                -26.27294% 30.56981%,
+                -25.09971% 35.64292%,
+                -23.77324% 40.7166%,
+                -22.31661% 45.76266%,
+                -20.75291% 50.75291%,
+                -19.10519% 55.65915%,
+                -17.39655% 60.45319%,
+                -15.65005% 65.10683%,
+                -13.88876% 69.59189%,
+                -12.13578% 73.88016%,
+                -10.41416% 77.94346%,
+                -8.74699% 81.75358%,
+                -7.15734% 85.28234%,
+                -5.66829% 88.50154%,
+                -4.30291% 91.38299%,
+                -3.08428% 93.89849%,
+                -2.03547% 96.01985%,
+                -1.17957% 97.71887%,
+                -0.53964% 98.96737%,
+                -0.13875% 99.73714%,
+                0% 100%,
+                100% 100%
+            );
+            transition: clip-path 500ms;
+        }
+        .explore-container:hover .explore-cut {
+            clip-path: polygon(
+                100% 0%,
+                100.00018% 0.14326%,
+                99.99754% 0.56399%,
+                99.98732% 1.24864%,
+                99.96476% 2.18368%,
+                99.92511% 3.35553%,
+                99.8636% 4.75066%,
+                99.77547% 6.35551%,
+                99.65597% 8.15653%,
+                99.50033% 10.14017%,
+                99.3038% 12.29288%,
+                99.06161% 14.60111%,
+                98.76901% 17.0513%,
+                98.42123% 19.62992%,
+                98.01352% 22.3234%,
+                97.54112% 25.11819%,
+                96.99926% 28.00074%,
+                96.38318% 30.95751%,
+                95.68814% 33.97494%,
+                94.90936% 37.03949%,
+                94.0421% 40.13759%,
+                93.08158% 43.2557%,
+                92.02305% 46.38027%,
+                90.86174% 49.49775%,
+                89.59291% 52.59459%,
+                88.21179% 55.65723%,
+                86.71362% 58.67212%,
+                85.09364% 61.62572%,
+                83.34709% 64.50448%,
+                81.46921% 67.29483%,
+                79.45524% 69.98324%,
+                77.30042% 72.55614%,
+                75% 75%,
+                72.55614% 77.30042%,
+                69.98324% 79.45524%,
+                67.29483% 81.46921%,
+                64.50448% 83.34709%,
+                61.62572% 85.09364%,
+                58.67212% 86.71362%,
+                55.65723% 88.21179%,
+                52.59459% 89.59291%,
+                49.49775% 90.86174%,
+                46.38027% 92.02305%,
+                43.2557% 93.08158%,
+                40.13759% 94.0421%,
+                37.03949% 94.90936%,
+                33.97494% 95.68814%,
+                30.95751% 96.38318%,
+                28.00074% 96.99926%,
+                25.11819% 97.54112%,
+                22.3234% 98.01352%,
+                19.62992% 98.42123%,
+                17.0513% 98.76901%,
+                14.60111% 99.06161%,
+                12.29288% 99.3038%,
+                10.14017% 99.50033%,
+                8.15653% 99.65597%,
+                6.35551% 99.77547%,
+                4.75066% 99.8636%,
+                3.35553% 99.92511%,
+                2.18368% 99.96476%,
+                1.24864% 99.98732%,
+                0.56399% 99.99754%,
+                0.14326% 100.00018%,
+                0% 100%,
+                100% 100%
+            );
+        }
+        .explore-container:active .explore-cut {
+            clip-path: polygon(
+                127.29527% 25.2734%,
+                127.29545% 25.41665%,
+                127.2928% 25.83738%,
+                127.28259% 26.52204%,
+                127.26003% 27.45707%,
+                127.22038% 28.62893%,
+                127.15887% 30.02405%,
+                127.07074% 31.6289%,
+                126.95124% 33.42992%,
+                126.7956% 35.41357%,
+                126.59907% 37.56628%,
+                126.35688% 39.8745%,
+                126.06428% 42.3247%,
+                125.7165% 44.90331%,
+                125.30879% 47.59679%,
+                124.83638% 50.39158%,
+                124.29452% 53.27414%,
+                123.67845% 56.23091%,
+                122.98341% 59.24834%,
+                122.20463% 62.31288%,
+                121.33736% 65.41099%,
+                120.37685% 68.5291%,
+                119.31831% 71.65367%,
+                118.15701% 74.77115%,
+                116.88818% 77.86798%,
+                115.50706% 80.93062%,
+                114.00889% 83.94552%,
+                112.3889% 86.89912%,
+                110.64235% 89.77787%,
+                108.76447% 92.56823%,
+                106.75051% 95.25663%,
+                104.59569% 97.82954%,
+                102.29527% 100.2734%,
+                99.85141% 102.57382%,
+                97.2785% 104.72864%,
+                94.5901% 106.7426%,
+                91.79974% 108.62048%,
+                88.92099% 110.36703%,
+                85.96739% 111.98702%,
+                82.9525% 113.48519%,
+                79.88985% 114.86631%,
+                76.79302% 116.13514%,
+                73.67554% 117.29644%,
+                70.55097% 118.35497%,
+                67.43286% 119.31549%,
+                64.33476% 120.18276%,
+                61.27021% 120.96154%,
+                58.25278% 121.65658%,
+                55.29601% 122.27265%,
+                52.41345% 122.81451%,
+                49.61866% 123.28692%,
+                46.92518% 123.69463%,
+                44.34657% 124.0424%,
+                41.89638% 124.33501%,
+                39.58815% 124.5772%,
+                37.43544% 124.77373%,
+                35.4518% 124.92937%,
+                33.65078% 125.04887%,
+                32.04593% 125.137%,
+                30.6508% 125.19851%,
+                29.47894% 125.23816%,
+                28.54391% 125.26071%,
+                27.85926% 125.27093%,
+                27.43852% 125.27358%,
+                27.29527% 125.2734%,
+                127.29527% 125.2734%
+            );
+        }
+        .explore-dot {
+            position: absolute;
+            /*draw particles as circles:*/
+            border-radius: 50%;
+            background-color: #d7385e;
+        }
+        .explore-text-container {
+            align-items: center;
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            position: absolute;
+            width: 100%;
+        }
+        .explore-text {
+            color: #f0a79e;
+            font-size: 18px;
+            position: absolute;
+            font-family: 'Questrial', sans-serif;
+            font-weight: 800;
+        }
+        .explore-text-dark {
+            color: #fff;
+        }
+        .explore-overlay {
+            height: 100%;
+            position: absolute;
+            width: 100%;
+        }
+
+        /* Hover effects for team cards */
+        @media (hover: hover) {
+            .team-card::after {
+                transform: translateY(0);
+            }
+            
+            .team-content {
+                transform: translateY(calc(100% - 4.5rem));
+            }
+            
+            .team-content > *:not(.team-title) {
+                opacity: 0;
+                transform: translateY(1rem);
+                transition:
+                    transform 700ms cubic-bezier(0.19, 1, 0.22, 1),
+                    opacity 700ms cubic-bezier(0.19, 1, 0.22, 1);
+            }
+            
+            .team-card:hover,
+            .team-card:focus-within {
+                align-items: center;
+            }
+
+            .team-card:hover::before,
+            .team-card:focus-within::before { 
+                transform: translateY(-4%); 
+            }
+            
+            .team-card:hover::after,
+            .team-card:focus-within::after { 
+                transform: translateY(-50%); 
+            }
+
+            .team-card:hover .team-content,
+            .team-card:focus-within .team-content {
+                transform: translateY(0);
+            }
+
+            .team-card:hover .team-content > *:not(.team-title),
+            .team-card:focus-within .team-content > *:not(.team-title) {
+                opacity: 1;
+                transform: translateY(0);
+                transition-delay: calc(700ms / 8);
+            }
+            
+            .team-card:focus-within::before,
+            .team-card:focus-within::after,
+            .team-card:focus-within .team-content,
+            .team-card:focus-within .team-content > *:not(.team-title) {
+                transition-duration: 0s;
+            }
+        }
+
+        /* ========================================
+        TEAM DETAIL MODAL STYLES
+        ========================================
+        */
+        .team-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .team-modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .team-modal-content {
+            position: relative;
+            background: #150f21;
+            color: #fff;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .team-modal-overlay.visible .team-modal-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .team-modal-header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team-modal-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .team-modal-header p {
+            font-size: 1.1rem;
+            color: #cccccc;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .team-modal-body {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .team-leaders {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .team-leader {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .team-leader-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .team-leader-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-leader-info p {
+            color: #cccccc;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-members {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .team-members h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .members-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .member-item {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .team-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+            z-index: 10;
+        }
+
+        .team-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .team-modal-close span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #fff;
+            position: absolute;
+        }
+
+        .team-modal-close span:first-child {
+            transform: rotate(45deg);
+        }
+
+        .team-modal-close span:last-child {
+            transform: rotate(-45deg);
+        }
+
+        /* ========================================
         RESPONSIVE STYLES
         ========================================
         */
@@ -700,6 +1471,18 @@
             .about-text h2::after {
                 left: 50%;
                 transform: translateX(-50%);
+            }
+
+            .team-row {
+                gap: 1.5rem;
+            }
+
+            .leadership-card {
+                width: 250px;
+            }
+
+            .team-modal-body {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -731,6 +1514,22 @@
             .about-certificate-container h3 {
                 font-size: 1.8rem;
             }
+
+            .team-cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .team-category h3 {
+                font-size: 2rem;
+            }
+
+            .team-modal-header h2 {
+                font-size: 2rem;
+            }
+
+            .team-modal-body {
+                padding: 1.5rem;
+            }
         }
 
         @media (max-width: 576px) {
@@ -748,6 +1547,33 @@
             
             .about-certificate-container h3 {
                 font-size: 1.5rem;
+            }
+
+            .team-cards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .team-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .leadership-card {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .team-modal-header {
+                padding: 1.5rem;
+            }
+
+            .team-modal-body {
+                padding: 1rem;
+            }
+
+            .team-leader {
+                flex-direction: column;
+                text-align: center;
             }
         }
         
@@ -872,6 +1698,330 @@
         </div>
     </div>
 
+    <!-- Team Detail Modals -->
+    <div id="technical-modal" class="team-modal-overlay">
+        <div class="team-modal-content">
+            <button class="team-modal-close">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="team-modal-header">
+                <h2>Technical Team</h2>
+                <p>Our technical team works on developing innovative solutions and maintaining our technical infrastructure.</p>
+            </div>
+            <div class="team-modal-body">
+                <div class="team-leaders">
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Sarah Johnson</h4>
+                            <p>Team Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Michael Chen</h4>
+                            <p>Co-Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-members">
+                    <h3>Team Members</h3>
+                    <div class="members-list">
+                        <div class="member-item">Alex Rodriguez</div>
+                        <div class="member-item">Priya Patel</div>
+                        <div class="member-item">David Kim</div>
+                        <div class="member-item">Emily Wilson</div>
+                        <div class="member-item">James Brown</div>
+                        <div class="member-item">Sophia Garcia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="research-modal" class="team-modal-overlay">
+        <div class="team-modal-content">
+            <button class="team-modal-close">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="team-modal-header">
+                <h2>Research & Development</h2>
+                <p>Our R&D team explores cutting-edge technologies and conducts research to push the boundaries of innovation.</p>
+            </div>
+            <div class="team-modal-body">
+                <div class="team-leaders">
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Dr. Robert Williams</h4>
+                            <p>Team Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Lisa Thompson</h4>
+                            <p>Co-Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-members">
+                    <h3>Team Members</h3>
+                    <div class="members-list">
+                        <div class="member-item">Kevin Martinez</div>
+                        <div class="member-item">Rachel Lee</div>
+                        <div class="member-item">Daniel White</div>
+                        <div class="member-item">Olivia Davis</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="finance-modal" class="team-modal-overlay">
+        <div class="team-modal-content">
+            <button class="team-modal-close">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="team-modal-header">
+                <h2>Finance Team</h2>
+                <p>Our finance team manages budgets, sponsorships, and financial planning for all CSI SAU activities.</p>
+            </div>
+            <div class="team-modal-body">
+                <div class="team-leaders">
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Jennifer Adams</h4>
+                            <p>Team Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Brian Clark</h4>
+                            <p>Co-Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-members">
+                    <h3>Team Members</h3>
+                    <div class="members-list">
+                        <div class="member-item">Amanda Scott</div>
+                        <div class="member-item">Christopher Young</div>
+                        <div class="member-item">Michelle Hall</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="design-modal" class="team-modal-overlay">
+        <div class="team-modal-content">
+            <button class="team-modal-close">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="team-modal-header">
+                <h2>Design & Media</h2>
+                <p>Our design team creates visual content, branding materials, and manages our social media presence.</p>
+            </div>
+            <div class="team-modal-body">
+                <div class="team-leaders">
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Emma Rodriguez</h4>
+                            <p>Team Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Jason Miller</h4>
+                            <p>Co-Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-members">
+                    <h3>Team Members</h3>
+                    <div class="members-list">
+                        <div class="member-item">Nicole Taylor</div>
+                        <div class="member-item">Andrew Harris</div>
+                        <div class="member-item">Jessica Martin</div>
+                        <div class="member-item">Ryan King</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pr-modal" class="team-modal-overlay">
+        <div class="team-modal-content">
+            <button class="team-modal-close">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="team-modal-header">
+                <h2>Public Relations</h2>
+                <p>Our PR team manages external communications, partnerships, and promotes CSI SAU's activities.</p>
+            </div>
+            <div class="team-modal-body">
+                <div class="team-leaders">
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Victoria Lewis</h4>
+                            <p>Team Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Thomas Walker</h4>
+                            <p>Co-Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-members">
+                    <h3>Team Members</h3>
+                    <div class="members-list">
+                        <div class="member-item">Samantha Green</div>
+                        <div class="member-item">Brandon Allen</div>
+                        <div class="member-item">Lauren Wright</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="events-modal" class="team-modal-overlay">
+        <div class="team-modal-content">
+            <button class="team-modal-close">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="team-modal-header">
+                <h2>Event Management</h2>
+                <p>Our events team plans, organizes, and executes all CSI SAU events, workshops, and competitions.</p>
+            </div>
+            <div class="team-modal-body">
+                <div class="team-leaders">
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Daniel Roberts</h4>
+                            <p>Team Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Megan Carter</h4>
+                            <p>Co-Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-members">
+                    <h3>Team Members</h3>
+                    <div class="members-list">
+                        <div class="member-item">Justin Phillips</div>
+                        <div class="member-item">Hannah Evans</div>
+                        <div class="member-item">Tyler Mitchell</div>
+                        <div class="member-item">Grace Parker</div>
+                        <div class="member-item">Jordan Turner</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="documentation-outreach-modal" class="team-modal-overlay">
+        <div class="team-modal-content">
+            <button class="team-modal-close">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="team-modal-header">
+                <h2>Documentation & Outreach</h2>
+                <p>Our Documentation & Outreach team maintains records, creates content, and engages with the community.</p>
+            </div>
+            <div class="team-modal-body">
+                <div class="team-leaders">
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Ashley Baker</h4>
+                            <p>Team Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-leader">
+                        <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
+                        <div class="team-leader-info">
+                            <h4>Kevin Nelson</h4>
+                            <p>Co-Lead</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-members">
+                    <h3>Team Members</h3>
+                    <div class="members-list">
+                        <div class="member-item">Brittany Hill</div>
+                        <div class="member-item">Zachary Cooper</div>
+                        <div class="member-item">Vanessa Reed</div>
+                        <div class="member-item">Cameron Bell</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section id="home" class="full-screen-section">
 
         <video id="bg-video" autoplay loop muted playsinline>
@@ -904,7 +2054,7 @@
         <div class="about-content">
             <div class="about-top">
                 <div class="about-logo-container">
-                    <img src="media/csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
+                    <img src="csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
                 </div>
                 <div class="about-text">
                     <h2>About Us</h2>
@@ -915,15 +2065,259 @@
             </div>
             <div class="about-certificate-container">
                 <h3>Official Recognition</h3>
-                <img src="media/certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
+                <img src="certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
             </div>
         </div>
     </section>
 
     <section id="team" class="full-screen-section dark-bg">
-        <div class="content-wrapper">
+        <div class="team-container">
             <h2>Our Team</h2>
-            <p>Content for the team section will go here.</p>
+            
+            <!-- Leadership Section -->
+            <div class="team-category">
+                <h3>Leadership</h3>
+                <div class="team-row">
+                    <!-- Dean -->
+                    <div class="leadership-card">
+                        <div class="leadership-img">
+                            <div class="leadership-img-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="leadership-info">
+                            <h4>Dr. John Smith</h4>
+                            <p>Dean</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Associate Dean -->
+                    <div class="leadership-card">
+                        <div class="leadership-img">
+                            <div class="leadership-img-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="leadership-info">
+                            <h4>Dr. Jane Doe</h4>
+                            <p>Associate Dean</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Faculty Advisors Section -->
+            <div class="team-category">
+                <h3>Faculty Advisors</h3>
+                <div class="team-row">
+                    <!-- Chief Branch Counsellor -->
+                    <div class="leadership-card">
+                        <div class="leadership-img">
+                            <div class="leadership-img-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="leadership-info">
+                            <h4>Dr. Robert Johnson</h4>
+                            <p>Chief Branch Counsellor</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Faculty Advisor 2 -->
+                    <div class="leadership-card">
+                        <div class="leadership-img">
+                            <div class="leadership-img-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="leadership-info">
+                            <h4>Dr. Emily Williams</h4>
+                            <p>Faculty Advisor</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Faculty Advisor 3 -->
+                    <div class="leadership-card">
+                        <div class="leadership-img">
+                            <div class="leadership-img-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="leadership-info">
+                            <h4>Dr. Michael Brown</h4>
+                            <p>Faculty Advisor</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Student President -->
+            <div class="team-category">
+                <h3>Student Leadership</h3>
+                <div class="team-row">
+                    <div class="leadership-card">
+                        <div class="leadership-img">
+                            <div class="leadership-img-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="leadership-info">
+                            <h4>Alex Thompson</h4>
+                            <p>Student President</p>
+                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Teams Section -->
+            <div class="team-category">
+                <h3>Our Teams</h3>
+                <div class="team-cards-container">
+                    <!-- Technical Team -->
+                    <div class="team-card technical">
+                        <div class="team-content">
+                            <h2 class="team-title">Technical</h2>
+                            <div class="explore-container" data-team="technical">
+                                <div class="explore-bottom"></div>
+                                <div class="explore-cover explore-cut"></div>
+                                <div class="explore-text-container">
+                                    <div class="explore-text explore-text-dark">EXPLORE</div>
+                                </div>
+                                <div class="explore-text-container explore-cut">
+                                    <div class="explore-text">EXPLORE</div>
+                                </div>
+                                <div class="explore-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Research & Development -->
+                    <div class="team-card research">
+                        <div class="team-content">
+                            <h2 class="team-title">Research & Development</h2>
+                            <div class="explore-container" data-team="research">
+                                <div class="explore-bottom"></div>
+                                <div class="explore-cover explore-cut"></div>
+                                <div class="explore-text-container">
+                                    <div class="explore-text explore-text-dark">EXPLORE</div>
+                                </div>
+                                <div class="explore-text-container explore-cut">
+                                    <div class="explore-text">EXPLORE</div>
+                                </div>
+                                <div class="explore-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Finance -->
+                    <div class="team-card finance">
+                        <div class="team-content">
+                            <h2 class="team-title">Finance</h2>
+                            <div class="explore-container" data-team="finance">
+                                <div class="explore-bottom"></div>
+                                <div class="explore-cover explore-cut"></div>
+                                <div class="explore-text-container">
+                                    <div class="explore-text explore-text-dark">EXPLORE</div>
+                                </div>
+                                <div class="explore-text-container explore-cut">
+                                    <div class="explore-text">EXPLORE</div>
+                                </div>
+                                <div class="explore-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Design & Media -->
+                    <div class="team-card design">
+                        <div class="team-content">
+                            <h2 class="team-title">Design & Media</h2>
+                            <div class="explore-container" data-team="design">
+                                <div class="explore-bottom"></div>
+                                <div class="explore-cover explore-cut"></div>
+                                <div class="explore-text-container">
+                                    <div class="explore-text explore-text-dark">EXPLORE</div>
+                                </div>
+                                <div class="explore-text-container explore-cut">
+                                    <div class="explore-text">EXPLORE</div>
+                                </div>
+                                <div class="explore-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Public Relations -->
+                    <div class="team-card pr">
+                        <div class="team-content">
+                            <h2 class="team-title">Public Relations</h2>
+                            <div class="explore-container" data-team="pr">
+                                <div class="explore-bottom"></div>
+                                <div class="explore-cover explore-cut"></div>
+                                <div class="explore-text-container">
+                                    <div class="explore-text explore-text-dark">EXPLORE</div>
+                                </div>
+                                <div class="explore-text-container explore-cut">
+                                    <div class="explore-text">EXPLORE</div>
+                                </div>
+                                <div class="explore-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Event Management -->
+                    <div class="team-card events">
+                        <div class="team-content">
+                            <h2 class="team-title">Event Management</h2>
+                            <div class="explore-container" data-team="events">
+                                <div class="explore-bottom"></div>
+                                <div class="explore-cover explore-cut"></div>
+                                <div class="explore-text-container">
+                                    <div class="explore-text explore-text-dark">EXPLORE</div>
+                                </div>
+                                <div class="explore-text-container explore-cut">
+                                    <div class="explore-text">EXPLORE</div>
+                                </div>
+                                <div class="explore-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Documentation & Outreach -->
+                    <div class="team-card documentation-outreach">
+                        <div class="team-content">
+                            <h2 class="team-title">Documentation & Outreach</h2>
+                            <div class="explore-container" data-team="documentation-outreach">
+                                <div class="explore-bottom"></div>
+                                <div class="explore-cover explore-cut"></div>
+                                <div class="explore-text-container">
+                                    <div class="explore-text explore-text-dark">EXPLORE</div>
+                                </div>
+                                <div class="explore-text-container explore-cut">
+                                    <div class="explore-text">EXPLORE</div>
+                                </div>
+                                <div class="explore-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     
@@ -1010,6 +2404,8 @@
         </filter>
     </svg>
 
+    <!-- Font Awesome for LinkedIn icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <script>
         // --- Binary Rain Animation Logic ---
@@ -1384,6 +2780,42 @@
                 yoyo: true,
                 repeat: 1
             });
+
+            // NEW: Team section animations
+            const teamSection = document.getElementById('team');
+            const leadershipCards = document.querySelectorAll('.leadership-card');
+            const teamCards = document.querySelectorAll('.team-card');
+
+            // Animate leadership cards
+            gsap.from(leadershipCards, {
+                scrollTrigger: {
+                    trigger: teamSection,
+                    start: "top 80%",
+                    end: "top 30%",
+                    scrub: true,
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+
+            // Animate team cards
+            gsap.from(teamCards, {
+                scrollTrigger: {
+                    trigger: teamSection,
+                    start: "top 70%",
+                    end: "top 10%",
+                    scrub: true,
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: "power2.out",
+                delay: 0.3
+            });
         }
     </script>
     
@@ -1417,6 +2849,127 @@
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape' && modalOverlay.classList.contains('visible')) {
                     closeModal();
+                }
+            });
+
+            // --- TEAM MODAL LOGIC ---
+            const exploreButtons = document.querySelectorAll('.explore-container');
+            const teamModals = document.querySelectorAll('.team-modal-overlay');
+            const teamModalCloses = document.querySelectorAll('.team-modal-close');
+
+            // Initialize explore button animations
+            exploreButtons.forEach(button => {
+                const bottom = button.querySelector('.explore-bottom');
+                const overlay = button.querySelector('.explore-overlay');
+                const count = 110;
+                const size = 50;
+                
+                for (let i = 0; i <= count; i += 1) {
+                    const dot = document.createElement("div");
+                    dot.classList.add("explore-dot");
+                    bottom.appendChild(dot);
+                }
+                
+                const dots = Array.from(button.querySelectorAll(".explore-dot"));
+                
+                const updateText = (text) => {
+                    Array.from(button.querySelectorAll(".explore-text")).forEach(
+                        (e) => (e.innerHTML = text)
+                    );
+                };
+                
+                const reset = () => {
+                    dots.forEach((dot, i) => {
+                        const x = (i / count) * (150 + size) - size / 2;
+                        const y = Math.random(1) * 52 - size / 2;
+                        dot.style.width = `${size}px`;
+                        dot.style.height = `${size}px`;
+                        dot.style.left = `${x}px`;
+                        dot.style.top = `${y}px`;
+                        dot.style.opacity = 1;
+                        dot.style.transform = "scale(1)";
+                    });
+                };
+                reset();
+                
+                overlay.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const team = button.getAttribute('data-team');
+                    openTeamModal(team);
+                    
+                    anime({
+                        easing: "linear",
+                        targets: dots,
+                        opacity: [{ value: 0, duration: 600, delay: anime.stagger(10) }],
+                        translateX: {
+                            value: function () {
+                                return anime.random(-30, 30);
+                            },
+                            duration: 400,
+                            delay: anime.stagger(10)
+                        },
+                        translateY: {
+                            value: function () {
+                                return anime.random(-30, 30);
+                            },
+                            duration: 400,
+                            delay: anime.stagger(10)
+                        },
+                        scale: {
+                            value: function () {
+                                return 0;
+                            },
+                            duration: 400,
+                            delay: anime.stagger(10)
+                        }
+                    });
+                    anime({
+                        easing: "linear",
+                        delay: 4000,
+                        complete: () => {
+                            updateText("EXPLORED");
+                            setTimeout(() => {
+                                updateText("EXPLORE");
+                                reset();
+                            }, 3000);
+                        }
+                    });
+                });
+            });
+
+            // Open team modal function
+            function openTeamModal(team) {
+                const modal = document.getElementById(`${team}-modal`);
+                if (modal) {
+                    modal.classList.add('visible');
+                }
+            }
+
+            // Close team modal function
+            function closeTeamModals() {
+                teamModals.forEach(modal => {
+                    modal.classList.remove('visible');
+                });
+            }
+
+            // Add event listeners to close buttons
+            teamModalCloses.forEach(closeBtn => {
+                closeBtn.addEventListener('click', closeTeamModals);
+            });
+
+            // Close modals when clicking outside
+            teamModals.forEach(modal => {
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeTeamModals();
+                    }
+                });
+            });
+
+            // Close modals with ESC key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeTeamModals();
                 }
             });
 
@@ -1615,4 +3168,3 @@
 
 </body>
 </html>
-
