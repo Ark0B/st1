@@ -10,97 +10,145 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
     
+    <!-- Three.js libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.min.js"></script>
     
+    <!-- Anime.js for button animation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
     <style>
         /* ========================================
-        NEW: HEADER & RESPONSIVE NAV
+        NAV STYLES
         ========================================
         */
-        #main-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-            height: 70px;
-            background: rgba(10, 10, 10, 0.8);
-            border-bottom: 1px solid rgba(128, 128, 128, 0.4);
-            backdrop-filter: blur(5px);
-            transition: background-color 0.3s ease;
-        }
-
-        #main-header .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: #fff;
-            text-decoration: none;
-            flex-shrink: 0;
-        }
-
-        /* Container for desktop links */
-        .desktop-nav-links {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* New simplified nav styles */
-        #main-header nav {
-            /* All old fixed positioning is gone */
-        }
-
-        #main-header nav ul {
-            display: flex;
-            align-items: center;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            gap: 0.5rem;
-            height: 100%;
-        }
         
-        #main-header nav ul li {
-            position: relative; /* Kept for indicator */
-            height: 100%;
-            display: flex;
-            align-items: center;
+        /* --- Base Nav Styles --- */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            height: 44px;
+            border-radius: 100px;
+            border: 1px solid rgba(128, 128, 128, 0.4); 
         }
 
-        #main-header nav ul li a {
+        /* --- Background effects --- */
+        nav::after {
+            background: rgba(10, 10, 10, 0.5); 
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid white; 
+            z-index: -1;
+            border-radius: 100px;
+            opacity: 0.15;
+        }
+
+        nav::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid white;
+            z-index: 2;
+            border-radius: 100px;
+            pointer-events: none;
+        }
+
+        /* --- Fix for layout --- */
+        nav ul {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            height: 100%;
             font-family: "Roboto", sans-serif; 
             font-size: 1rem;                   
             font-weight: 600; 
-            text-decoration: none;
-            color: #ffffff;
-            opacity: 0.75;
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            transition: opacity 0.25s ease-out, background-color 0.25s ease-out;
-            display: flex;
-            align-items: center;
-            height: 44px; /* Give a consistent height */
         }
 
-        #main-header nav ul li a:hover,
-        #main-header nav ul li a[data-active='true'] {
-            opacity: 1;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Gold indicator position */
-        .gold-indicator {
+        /* --- 'lit' list (the spotlight background) --- */
+        nav ul.lit {
             position: absolute;
-            top: 10px; /* Adjust as needed */
-            right: 8px; /* Adjust as needed */
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            filter: url('#spotlight');
+        }
+
+        nav ul.lit li {
+            padding: 0.5rem 1.75rem; /* Spacing */
+        }
+
+        /* --- 'content' list (the clickable links) --- */
+        nav ul.content li {
+            height: 100%;
+            display: grid;
+            place-items: center;
+            position: relative; /* Added for indicator positioning */
+        }
+
+        nav ul.content li a {
+            display: grid;
+            place-items: center;
+            height: 100%;
+            padding: 0.5rem 1.75rem; /* Spacing */
+            text-decoration: none;
+            color: #ffffff; /* Text is white */
+            opacity: 0.75; /* Unselected items are 75% white */
+            transition: opacity 0.25s ease-out;
+            position: relative; /* Added for indicator positioning */
+        }
+
+        nav ul.content li a:is(:hover, :focus-visible) {
+            opacity: 1; /* Hovered items are 100% white */
+        }
+
+        nav ul.content li a span {
+            pointer-events: none;
+        }
+
+        /* --- Border effect for the content list --- */
+        nav ul.content::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 100px;
+            pointer-events: none;
+            border: 1px solid white;
+            filter: url('#ambience') brightness(2);
+        }
+
+        /* --- Style for the active/selected link --- */
+        [data-active='true'] {
+            opacity: 0.8; /* Active item is 80% white */
+        }
+
+        /* Filter effects for the nav */
+        nav::before,
+        nav::after,
+        nav ul.lit {
+            filter: url('#spotlight');
+        }
+
+        /* ========================================
+        GOLD INDICATOR STYLES
+        ========================================
+        */
+        /* 
+        EASY OFF-SWITCH: 
+        To disable the gold indicator, simply set the 'display' property to 'none' in the rule below.
+        Example: 
+          .gold-indicator { display: none; }
+        */
+        .gold-indicator {
+            
+            position: absolute;
+            top: 18px;
+            right: 14px;
             width: 8px;
             height: 8px;
             background-color: #f5c837;
@@ -109,22 +157,34 @@
             pointer-events: none;
             animation: pulse-gold 2s infinite;
             box-shadow: 0 0 8px rgba(212, 175, 55, 0.7);
+            
+            
         }
         
+
         @keyframes pulse-gold {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { transform: scale(1.23); box-shadow: 0 0 0 4px rgba(212, 175, 55, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+            }
+            70% {
+                transform: scale(1.23);
+                box-shadow: 0 0 0 4px rgba(212, 175, 55, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
         }
 
         /* ========================================
-        REGISTER BUTTON STYLES (MODIFIED)
+        REGISTER BUTTON STYLES
         ========================================
         */
         #register-btn {
-            position: relative; /* REMOVED fixed */
-            top: auto;
-            right: auto;
+            position: fixed;
+            top: 20px;
+            right: 40px; 
             z-index: 1001; 
             
             height: 44px; 
@@ -134,9 +194,9 @@
             font-size: 1rem;
             font-weight: 650;
             
-            color: #D4AF37;
-            background-color: transparent;
-            border: 2px solid #D4AF37;
+            color: #D4AF37; /* Gold text */
+            background-color: transparent; /* Transparent background */
+            border: 2px solid #D4AF37; /* Gold border */
             border-radius: 100px; 
             
             display: flex;
@@ -147,45 +207,22 @@
             cursor: pointer;
             
             transition: all 0.2s ease-out;
-            flex-shrink: 0;
         }
         
         #register-btn:hover {
-            color: #FFD700;
-            background-color: rgba(212, 175, 55, 0.05);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-            transform: scale(1.02);
+            color: #FFD700; /* Brighter gold text on hover */
+            background-color: rgba(212, 175, 55, 0.05); /* Very subtle dark gold glow */
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); /* Soft gold shadow */
+            transform: scale(1.02); /* Slight scale up */
         }
 
         /* Click animation */
         #register-btn.clicked {
-            transform: scale(0.98);
+            transform: scale(0.98); /* Subtle press in */
             opacity: 0.9;
             transition: transform 0.1s ease;
         }
 
-        /* ========================================
-        NEW: MOBILE NAV STYLES
-        ========================================
-        */
-        #mobile-nav-toggle {
-            display: none; /* Hide on desktop */
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            z-index: 1002;
-        }
-
-        #mobile-nav-toggle .bar {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background-color: #fff;
-            margin: 5px 0;
-            transition: all 0.3s ease;
-        }
-        
         /* ========================================
         MODAL STYLES
         ========================================
@@ -310,7 +347,6 @@
             overflow-y: scroll;
             scrollbar-width: thin;
             scrollbar-color: #3498db #0a0a0a;
-            scroll-padding-top: 70px; /* NEW: Offset for fixed header */
         }
 
         body {
@@ -773,16 +809,24 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            background-color: #0077b5;
+            background-color: #000000;
             color: white;
             text-decoration: none;
-            border-radius: 50%;
+            border-radius: 5px;
             font-size: 1.2rem;
             transition: background-color 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .linkedin-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: invert(1); /* Makes the black logo white on black background */
         }
 
         .linkedin-icon:hover {
-            background-color: #005885;
+            background-color: #0077b5;
             transform: scale(1.1);
         }
 
@@ -799,7 +843,8 @@
         .team-card {
             position: relative;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
             padding: 1rem;
             width: 100%;
@@ -812,7 +857,7 @@
                 0 4px 4px rgba(0,0,0,0.1), 
                 0 8px 8px rgba(0,0,0,0.1),
                 0 16px 16px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            border-radius: 20px; /* More rounded corners */
         }
 
         .team-card::before {
@@ -826,7 +871,7 @@
             background-position: 0 0;
             transition: transform 1050ms cubic-bezier(0.19, 1, 0.22, 1);
             pointer-events: none;
-            border-radius: 10px;
+            border-radius: 20px; /* More rounded corners */
         }
 
         .team-card::after {
@@ -859,7 +904,7 @@
             );
             transform: translateY(-50%);
             transition: transform 1400ms cubic-bezier(0.19, 1, 0.22, 1);
-            border-radius: 10px;
+            border-radius: 20px; /* More rounded corners */
         }
 
         /* Team-specific background images */
@@ -896,7 +941,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             width: 100%;
+            height: 100%;
             padding: 1rem;
             transition: transform 700ms cubic-bezier(0.19, 1, 0.22, 1);
             z-index: 1;
@@ -907,7 +954,7 @@
         }
 
         .team-title {
-            font-size: 1.2rem; /* Smaller font size to fit team names */
+            font-size: 1rem; /* Adjusted font size */
             font-weight: bold;
             line-height: 1.2;
             color: white;
@@ -915,9 +962,18 @@
             text-align: center;
             width: 100%;
             word-wrap: break-word;
+            transition: font-size 0.3s ease; /* Smooth transition for font size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            margin: 0;
+            padding: 0 0.5rem;
+            
         }
+        
 
-        /* New Explore Button Styles */
+        /* New Professional Explore Button Styles */
         .explore-container {
             align-items: center;
             border-radius: 26px;
@@ -931,11 +987,13 @@
             height: 52px;
             width: 150px;
             margin-top: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .explore-bottom {
             border-radius: 26px;
-            background: #eabbbb;
+            background: #1a2b5a; /* Dark blue to match site theme */
             height: 100%;
             overflow: hidden;
             position: absolute;
@@ -943,7 +1001,7 @@
         }
 
         .explore-cover {
-            background-color: #3743a4;
+            background-color: #3498db; /* Blue to match site theme */
             border-radius: 26px;
             height: 100%;
             position: absolute;
@@ -1164,7 +1222,7 @@
             position: absolute;
             /*draw particles as circles:*/
             border-radius: 50%;
-            background-color: #d7385e;
+            background-color: #3498db; /* Blue to match site theme */
         }
         .explore-text-container {
             align-items: center;
@@ -1175,14 +1233,14 @@
             width: 100%;
         }
         .explore-text {
-            color: #f0a79e;
+            color: #ffffff;
             font-size: 18px;
             position: absolute;
             font-family: 'Questrial', sans-serif;
             font-weight: 800;
         }
         .explore-text-dark {
-            color: #fff;
+            color: #1a2b5a; /* Dark blue to match site theme */
         }
         .explore-overlay {
             height: 100%;
@@ -1197,7 +1255,7 @@
             }
             
             .team-content {
-                transform: translateY(calc(100% - 4.5rem));
+                transform: translateY(0);
             }
             
             .team-content > *:not(.team-title) {
@@ -1235,12 +1293,171 @@
                 transition-delay: calc(700ms / 8);
             }
             
+            /* Font size animation on hover */
+            .team-card:hover .team-title {
+                font-size: 35px; /* Slightly smaller on hover to make room for button */
+                transform: translateY(-20px); /* Move title up on hover */
+            }
+            
             .team-card:focus-within::before,
             .team-card:focus-within::after,
             .team-card:focus-within .team-content,
             .team-card:focus-within .team-content > *:not(.team-title) {
                 transition-duration: 0s;
             }
+        }
+
+        /* ========================================
+        EVENTS SECTION STYLES
+        ========================================
+        */
+        #events {
+            background-color: #0a0f1a;
+            padding: 4rem 2rem;
+            min-height: 100vh;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+
+        .events-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .event-card {
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(52, 152, 219, 0.2);
+        }
+
+        .event-banner {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #3498db, #D4AF37);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover;
+            opacity: 0.7;
+        }
+
+        .event-banner h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            z-index: 1;
+            text-align: center;
+        }
+
+        .event-content {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-details h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .event-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-date svg {
+            width: 20px;
+            height: 20px;
+            color: #D4AF37;
+        }
+
+        .event-date span {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        .event-description {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #cccccc;
+        }
+
+        .event-register-btn {
+            align-self: flex-start;
+            padding: 0.75rem 2rem;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #cccccc;
+            background-color: #2a2a2a;
+            border: 2px solid #555555;
+            border-radius: 8px;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+        }
+
+        .event-register-btn:hover {
+            background-color: #333333;
+            border-color: #777777;
+        }
+
+        /* Teddy Bear Container */
+        .teddy-bear-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            z-index: 2;
         }
 
         /* ========================================
@@ -1411,105 +1628,10 @@
         }
 
         /* ========================================
-        RESPONSIVE STYLES
+        MOBILE RESPONSIVE STYLES
         ========================================
         */
-        
-        /* Tablet and below (992px and down) */
         @media (max-width: 992px) {
-            html {
-                scroll-padding-top: 60px; /* Adjust for smaller header */
-            }
-
-            #main-header {
-                height: 60px;
-                padding: 0 1.5rem;
-            }
-
-            #main-header .logo {
-                font-size: 1.4rem;
-            }
-
-            /* --- NEW: Mobile Nav Logic --- */
-            .desktop-nav-links {
-                display: none; /* Hide desktop nav container */
-            }
-
-            #mobile-nav-toggle {
-                display: block; /* Show hamburger */
-            }
-
-            /* Show mobile nav when active */
-            #main-header.mobile-nav-active {
-                background: transparent; /* Make header transparent */
-                border-bottom: none;
-            }
-
-            #main-header.mobile-nav-active .desktop-nav-links {
-                display: flex;
-                flex-direction: column;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                background: #0a0f1a; /* Dark background */
-                justify-content: center;
-                align-items: center;
-                gap: 2rem;
-                padding: 1rem;
-            }
-
-            #main-header.mobile-nav-active nav ul {
-                flex-direction: column;
-                gap: 1.5rem;
-                height: auto;
-            }
-
-            #main-header.mobile-nav-active nav ul li {
-                height: auto;
-            }
-
-            #main-header.mobile-nav-active nav ul li a {
-                font-size: 1.5rem; /* Make links bigger */
-                height: auto;
-                padding: 0.75rem 1.5rem;
-            }
-            
-            #main-header.mobile-nav-active #register-btn {
-                font-size: 1.5rem;
-                padding: 0.75rem 2rem;
-                height: auto;
-            }
-
-            /* Animate hamburger to 'X' */
-            #main-header.mobile-nav-active #mobile-nav-toggle {
-                position: fixed; /* Keep it in view */
-                top: 15px; /* Adjust to new header height */
-                right: 1.5rem;
-            }
-            #main-header.mobile-nav-active #mobile-nav-toggle .bar:nth-child(1) {
-                transform: translateY(8px) rotate(45deg);
-            }
-            #main-header.mobile-nav-active #mobile-nav-toggle .bar:nth-child(2) {
-                opacity: 0;
-            }
-            #main-header.mobile-nav-active #mobile-nav-toggle .bar:nth-child(3) {
-                transform: translateY(-8px) rotate(-45deg);
-            }
-            /* --- END NEW: Mobile Nav Logic --- */
-
-            
-            /* Hero section */
-            .hero-content h1 {
-                font-size: 3.5rem;
-            }
-            
-            .hero-content p {
-                font-size: 1.5rem;
-            }
-            
-            /* About section */
             .about-top {
                 flex-direction: column;
                 gap: 2rem;
@@ -1531,12 +1653,7 @@
                 left: 50%;
                 transform: translateX(-50%);
             }
-            
-            .about-text p {
-                text-align: center;
-            }
 
-            /* Team section */
             .team-row {
                 gap: 1.5rem;
             }
@@ -1549,53 +1666,25 @@
                 grid-template-columns: 1fr;
             }
             
-            /* Full screen sections */
-            .full-screen-section h2 {
-                font-size: 3rem;
+            .event-header {
+                flex-direction: column;
+            }
+            
+            .teddy-bear-container {
+                position: relative;
+                top: auto;
+                right: auto;
+                width: 100px;
+                height: 100px;
+                margin-bottom: 1rem;
             }
         }
 
-        /* Small tablets and large phones (768px and down) */
         @media (max-width: 768px) {
-            /* Header adjustments */
-            #main-header {
-                padding: 0 1.5rem;
-                height: 60px;
-            }
-            #main-header .logo {
-                font-size: 1.25rem;
-            }
-            #main-header.mobile-nav-active #mobile-nav-toggle {
-                top: 15px;
-                right: 1.5rem;
-            }
-            
-            .gold-indicator {
-                top: 10px;
-                right: 5px;
-                width: 6px;
-                height: 6px;
-            }
-            
-            /* Hero section */
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-content p {
-                font-size: 1.2rem;
-            }
-            
-            /* General spacing */
             .full-screen-section {
                 padding: 1rem 2rem;
             }
             
-            .full-screen-section h2 {
-                font-size: 2.5rem;
-            }
-            
-            /* About section */
             #about {
                 padding: 2rem 2rem;
             }
@@ -1620,10 +1709,8 @@
                 font-size: 1.8rem;
             }
 
-            /* Team section */
             .team-cards-container {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 1.5rem;
             }
 
             .team-category h3 {
@@ -1638,79 +1725,68 @@
                 padding: 1.5rem;
             }
             
-            /* Modal adjustments */
-            #modal-content {
-                padding: 1.5rem 2rem 2rem 2rem;
-                width: 85%;
+            .event-banner h3 {
+                font-size: 2.5rem;
             }
             
-            .modal-header h3 {
-                font-size: 1.3rem;
+            .event-details h2 {
+                font-size: 2rem;
             }
             
-            #modal-content p {
-                font-size: 1rem;
+            .event-content {
+                padding: 2rem;
             }
         }
 
-        /* Mobile devices (576px and down) */
         @media (max-width: 576px) {
-            html {
-                scroll-padding-top: 60px; /* No change, 60px is fine */
-            }
 
-            /* Header adjustments */
-            #main-header {
-                padding: 0 1rem;
-            }
-            #main-header .logo {
-                font-size: 1.1rem;
-            }
-            #main-header.mobile-nav-active #mobile-nav-toggle {
-                top: 15px; /* (60px - 30px) / 2 */
-                right: 1rem;
+            /* Mobile Navigation */
+            nav {
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+nav::-webkit-scrollbar {
+    display: none; /* Chrome */
+}
+
+nav ul {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+nav ul.content li a {
+    padding: 0.5rem 1.2rem; 
+}
+
+            nav {
+                top: 10px;
+                width: 90%;
+                max-width: 500px;
             }
             
-            .gold-indicator {
-                top: 12px;
-                right: 4px;
-                width: 5px;
-                height: 5px;
-            }
-
-            /* Mobile nav link size */
-            #main-header.mobile-nav-active nav ul li a {
-                font-size: 1.2rem;
-            }
-            #main-header.mobile-nav-active #register-btn {
-                font-size: 1.2rem;
+            nav ul.content li a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
             
-            /* Hero section */
+            #register-btn {
+                top: 10px;
+                right: 20px;
+                padding: 0 1.25rem;
+                font-size: 0.9rem;
+            }
+            
+            /* Hero Section */
             .hero-content h1 {
-                font-size: 2rem;
-                line-height: 1.2;
+                font-size: 2.5rem;
             }
             
             .hero-content p {
-                font-size: 1rem;
+                font-size: 1.2rem;
             }
             
-            /* General spacing */
-            .full-screen-section {
-                padding: 1rem 1rem;
-            }
-            
-            .full-screen-section h2 {
-                font-size: 2rem;
-                margin-bottom: 1rem;
-            }
-            
-            /* About section */
-            #about {
-                padding: 2rem 1rem;
-            }
-            
+            /* About Section */
             .about-logo {
                 max-width: 200px;
             }
@@ -1721,35 +1797,20 @@
             
             .about-text p {
                 font-size: 1rem;
-                line-height: 1.6;
             }
             
             .about-certificate-container h3 {
                 font-size: 1.5rem;
             }
-            
-            .about-certificate {
-                max-width: 100%;
-            }
 
-            /* Team section */
-            #team {
-                padding: 2rem 1rem;
-            }
-            
+            /* Team Section */
             .team-cards-container {
                 grid-template-columns: 1fr;
-                gap: 1.25rem;
-            }
-            
-            .team-card {
-                height: 320px;
             }
 
             .team-row {
                 flex-direction: column;
                 align-items: center;
-                gap: 1.25rem;
             }
 
             .leadership-card {
@@ -1757,50 +1818,52 @@
                 max-width: 300px;
             }
             
-            .team-category h3 {
-                font-size: 1.75rem;
-            }
-
-            /* Modal adjustments */
-            #modal-content {
-                padding: 1.25rem 1.5rem 1.5rem 1.5rem;
-                width: 90%;
-                max-width: 100%;
+            /* Team Cards - Mobile Adaptations */
+            .team-card {
+                height: 300px;
             }
             
-            .modal-header {
-                margin-bottom: 1rem;
+            .team-title {
+                font-size: 1rem;
+                line-height: 1.3;
             }
             
-            .modal-header .icon {
-                width: 32px;
-                height: 32px;
+            /* Show explore button by default on mobile */
+            .team-content {
+                transform: translateY(0) !important;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
             }
             
-            .modal-header h3 {
-                font-size: 1.2rem;
+            .team-content > *:not(.team-title) {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
             }
             
-            #modal-content p {
-                font-size: 0.95rem;
-                line-height: 1.5;
+            /* Adjust team card hover effects for mobile */
+            .team-card::before {
+                transform: none;
             }
             
-            .team-modal-content {
-                width: 95%;
-                max-width: 100%;
+            .team-card::after {
+                transform: translateY(-50%);
             }
-
+            
+            /* Explore Button - Mobile Style */
+            .explore-container {
+                height: 44px;
+                width: 130px;
+                margin-top: 1rem;
+            }
+            
+            .explore-text {
+                font-size: 16px;
+            }
+            
+            /* Team Modal */
             .team-modal-header {
                 padding: 1.5rem;
-            }
-            
-            .team-modal-header h2 {
-                font-size: 1.75rem;
-            }
-            
-            .team-modal-header p {
-                font-size: 0.95rem;
             }
 
             .team-modal-body {
@@ -1810,92 +1873,44 @@
             .team-leader {
                 flex-direction: column;
                 text-align: center;
-                padding: 0.75rem;
-            }
-            
-            .team-leader-img {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .team-leader-info h4 {
-                font-size: 1rem;
             }
             
             .members-list {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
             
-            .member-item {
-                padding: 0.6rem;
-                font-size: 0.9rem;
+            /* Events Section */
+            .event-banner {
+                height: 200px;
             }
             
-            .scroll-down-arrow {
-                width: 30px;
-                height: 30px;
+            .event-banner h3 {
+                font-size: 2rem;
+            }
+            
+            .event-content {
+                padding: 1.5rem;
+            }
+            
+            .event-details h2 {
+                font-size: 1.8rem;
+            }
+            
+            .teddy-bear-container {
+                width: 80px;
+                height: 80px;
             }
         }
-        
-        /* Very small mobile devices (400px and down) */
-        @media (max-width: 400px) {
-            #main-header.mobile-nav-active nav ul li a {
-                font-size: 1.1rem;
-            }
-            #main-header.mobile-nav-active #register-btn {
-                font-size: 1.1rem;
-            }
-            
-            .hero-content h1 {
-                font-size: 1.75rem;
-            }
-            
-            .hero-content p {
-                font-size: 0.9rem;
-            }
-            
-            .full-screen-section h2 {
-                font-size: 1.75rem;
-            }
-            
-            .about-text h2 {
-                font-size: 1.75rem;
-            }
-            
-            .team-category h3 {
-                font-size: 1.5rem;
-            }
-            
-            .scroll-down-arrow {
-                width: 28px;
-                height: 28px;
-            }
-        }
-        
-        /* Landscape orientation on mobile devices */
-        @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
-            html {
-                scroll-padding-top: 50px;
-            }
-            #main-header {
-                height: 50px;
-            }
-            #main-header.mobile-nav-active #mobile-nav-toggle {
-                top: 10px;
-            }
-            #main-header.mobile-nav-active nav ul {
-                gap: 1rem;
-            }
-            #main-header.mobile-nav-active nav ul li a {
-                font-size: 1rem;
-            }
-            #main-header.mobile-nav-active #register-btn {
-                font-size: 1rem;
-            }
 
-            .full-screen-section {
-                min-height: 100vh;
-                height: auto;
+        @media (max-width: 400px) {
+            nav ul.content li a {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            
+            #register-btn {
+                padding: 0 1rem;
+                font-size: 0.8rem;
             }
             
             .hero-content h1 {
@@ -1906,13 +1921,20 @@
                 font-size: 1rem;
             }
             
-            .scroll-down-arrow-link {
-                bottom: 15px;
+            .team-title {
+                font-size: 1.1rem;
             }
             
-            .scroll-down-arrow {
-                width: 24px;
-                height: 24px;
+            .members-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-banner h3 {
+                font-size: 1.8rem;
+            }
+            
+            .event-details h2 {
+                font-size: 1.6rem;
             }
         }
         
@@ -1981,8 +2003,170 @@
                 filter: drop-shadow(0 0 3px rgba(52, 152, 219, 0.4));
             }
         }
+        
+        .title-small{
+          font-size: 48px !important;
 
-    </style>
+        }
+        .team-card:hover .title-small{
+              font-size: 28px !important;
+              transform: translateY(-20px);
+        }
+
+    
+    .contact-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+}
+
+#contact-particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.contact-content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1100px;
+}
+
+.contact-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #D4AF37;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    letter-spacing: 2px;
+}
+
+/* slim gold line on both sides */
+.contact-accent {
+    display: inline-block;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    opacity: 0;
+    transform: translateY(6px);
+    animation: accentFade 1s ease forwards;
+}
+
+@keyframes accentFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-title {
+        font-size: 1.7rem;
+        gap: 0.7rem;
+    }
+    .contact-accent {
+        width: 40px;
+    }
+}
+
+
+.gold-bar {
+    display: inline-block;
+    width: 70px;
+    height: 3px;
+    background: #D4AF37;
+    transform: scaleX(0);
+    transform-origin: center;
+    animation: barExpand 1s ease forwards;
+}
+
+@keyframes barExpand {
+    to { transform: scaleX(1); }
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.info-block h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: #D4AF37;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.info-block p {
+    font-family: 'Roboto', sans-serif;
+    color: #ddd;
+    line-height: 1.6;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+    background: #111;
+    border: 1px solid #333;
+    padding: 1rem;
+    color: #fff;
+    border-radius: 6px;
+    font-family: 'Roboto', sans-serif;
+    transition: border 0.2s ease, background 0.2s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #D4AF37;
+    background: #0d0d0d;
+    outline: none;
+}
+
+.contact-form button {
+    background: #D4AF37;
+    color: #000;
+    padding: 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.contact-form button:hover {
+    transform: translateY(-3px);
+    background: #ebc763;
+}
+
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+    .contact-title { font-size: 2.3rem; }
+}
+</style>
 </head>
 <body>
 
@@ -1990,43 +2174,40 @@
         <canvas id="binary-rain-canvas"></canvas>
     </div>
 
-    <header id="main-header">
-        <a href="#home" class="logo">CSI SAU</a>
-        
-        <div class="desktop-nav-links">
-            <nav>
-                <ul>
-                    <li>
-                        <a data-active="true" href="#home"><span>Home</span></a>
-                    </li>
-                    <li>
-                        <a href="#about"><span>About</span></a>
-                    </li>
-                    <li>
-                        <a href="#team"><span>Team</span></a>
-                    </li>
-                    <li>
-                        <a href="#events"><span>Events</span>
-                            <div class="gold-indicator"></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#contact"><span>Contact</span></a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <a id="register-btn">
-                <span>REGISTER</span>
-            </a>
-        </div>
+    <nav>
+        <ul aria-hidden="true" class="lit">
+            <li>Home</li>
+            <li>About</li>
+            <li>Team</li>
+            <li>Events</li>
+            <li>Contact</li>
+        </ul>
+        <ul class="content">
+            <li>
+                <a data-active="true" href="#home"><span>Home</span></a>
+            </li>
+            <li>
+                <a href="#about"><span>About</span></a>
+            </li>
+            <li>
+                <a href="#team"><span>Team</span></a>
+            </li>
+            <li>
+                <a href="#events"><span>Events</span>
+                    <!-- GOLD INDICATOR -->
+                    <div class="gold-indicator"></div>
+                </a>
+            </li>
+            <li>
+                <a href="#contact"><span>Contact</span></a>
+            </li>
+        </ul>
+    </nav>
 
-        <button id="mobile-nav-toggle" aria-label="Toggle navigation">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-    </header>
+    <a id="register-btn">
+        <span>REGISTER</span>
+    </a>
+
     <div id="modal-overlay">
         <div id="modal-content">
             <button id="modal-close-btn">&times;</button>
@@ -2040,6 +2221,7 @@
         </div>
     </div>
 
+    <!-- Team Detail Modals -->
     <div id="technical-modal" class="team-modal-overlay">
         <div class="team-modal-content">
             <button class="team-modal-close">
@@ -2048,7 +2230,7 @@
             </button>
             <div class="team-modal-header">
                 <h2>Technical Team</h2>
-                <p>The innovation engine of CSI-SAU. This team builds our projects, conducts hands-on coding workshops, and innovates with new technologies to keep our community skilled and future-ready.</p>
+                <p>Our technical team works on developing innovative solutions and maintaining our technical infrastructure.</p>
             </div>
             <div class="team-modal-body">
                 <div class="team-leaders">
@@ -2058,7 +2240,7 @@
                             <h4>Sarah Johnson</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2068,7 +2250,7 @@
                             <h4>Michael Chen</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2096,7 +2278,7 @@
             </button>
             <div class="team-modal-header">
                 <h2>Research & Development</h2>
-                <p>The forward-thinkers of the chapter. This team explores emerging technologies, researches new concepts, and works on long-term projects, pushing the boundaries of innovation for CSI-SAU.</p>
+                <p>Our R&D team explores cutting-edge technologies and conducts research to push the boundaries of innovation.</p>
             </div>
             <div class="team-modal-body">
                 <div class="team-leaders">
@@ -2106,7 +2288,7 @@
                             <h4>Dr. Robert Williams</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2116,7 +2298,7 @@
                             <h4>Lisa Thompson</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2142,7 +2324,7 @@
             </button>
             <div class="team-modal-header">
                 <h2>Finance Team</h2>
-                <p>The financial backbone of the chapter. This team manages the budget, tracks transactions, and handles sponsorships, ensuring the resources are in place to power all our initiatives.</p>
+                <p>Our finance team manages budgets, sponsorships, and financial planning for all CSI SAU activities.</p>
             </div>
             <div class="team-modal-body">
                 <div class="team-leaders">
@@ -2152,7 +2334,7 @@
                             <h4>Jennifer Adams</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2162,7 +2344,7 @@
                             <h4>Brian Clark</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2187,7 +2369,7 @@
             </button>
             <div class="team-modal-header">
                 <h2>Design & Media</h2>
-                <p>The creative force of CSI-SAU. This team designs everything you see, from eye-catching posters and social media graphics to UI/UX mockups, defining the "CSI vibe" and making our brand visually stunning.</p>
+                <p>Our design team creates visual content, branding materials, and manages our social media presence.</p>
             </div>
             <div class="team-modal-body">
                 <div class="team-leaders">
@@ -2197,7 +2379,7 @@
                             <h4>Emma Rodriguez</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2207,7 +2389,7 @@
                             <h4>Jason Miller</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2233,7 +2415,7 @@
             </button>
             <div class="team-modal-header">
                 <h2>Public Relations</h2>
-                <p>The voice of CSI-SAU. This team builds our public brand, manages media relations, and forges strategic collaborations, creating the "buzz" for our events.</p>
+                <p>Our PR team manages external communications, partnerships, and promotes CSI SAU's activities.</p>
             </div>
             <div class="team-modal-body">
                 <div class="team-leaders">
@@ -2243,7 +2425,7 @@
                             <h4>Victoria Lewis</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2253,7 +2435,7 @@
                             <h4>Thomas Walker</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2278,7 +2460,7 @@
             </button>
             <div class="team-modal-header">
                 <h2>Event Management</h2>
-                <p>The master planners of CSI-SAU. This team handles all logistics, coordination, and on-ground management to transform ideas into seamless, successful, and memorable events.</p>
+                <p>Our events team plans, organizes, and executes all CSI SAU events, workshops, and competitions.</p>
             </div>
             <div class="team-modal-body">
                 <div class="team-leaders">
@@ -2288,7 +2470,7 @@
                             <h4>Daniel Roberts</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2298,7 +2480,7 @@
                             <h4>Megan Carter</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2325,7 +2507,7 @@
             </button>
             <div class="team-modal-header">
                 <h2>Documentation & Outreach</h2>
-                <p>The storytellers of CSI-SAU. This team documents all our events, writes formal communications, and conducts outreach to connect with new members and partners, preserving our legacy and expanding our reach.</p>
+                <p>Our Documentation & Outreach team maintains records, creates content, and engages with the community.</p>
             </div>
             <div class="team-modal-body">
                 <div class="team-leaders">
@@ -2335,7 +2517,7 @@
                             <h4>Ashley Baker</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2345,7 +2527,7 @@
                             <h4>Kevin Nelson</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2386,6 +2568,7 @@
     </section>
 
     <section id="about" class="full-screen-section">
+        <!-- Three.js wave background container -->
         <div id="wave-background-container">
             <canvas id="wave-background"></canvas>
             <div class="wave-info"></div>
@@ -2394,18 +2577,18 @@
         <div class="about-content">
             <div class="about-top">
                 <div class="about-logo-container">
-                    <img src="media/csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
+                    <img src="csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
                 </div>
                 <div class="about-text">
                     <h2>About Us</h2>
                     <p>
-                        The CSI-SAU Student Chapter is South Asian University's dynamic hub for technology and innovation. We are a passionate community of student developers, coders, and creators dedicated to building a vibrant tech culture. We connect our members with the future of computer science by hosting cutting-edge workshops, high-energy coding competitions, and insightful guest lectures from industry leaders.
+                        The Computer Society of India (CSI) is the first and largest body of computer professionals in India. It was started on 6 March 1965 by a few computer professionals and has now grown to be the national body representing computer professionals, with 72 chapters, 511 student branches, and over 100,000 members. The purposes of the Society are scientific and educational, directed towards the advancement of the theory and practice of computer science and IT.
                     </p>
                 </div>
             </div>
             <div class="about-certificate-container">
                 <h3>Official Recognition</h3>
-                <img src="media/certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
+                <img src="certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
             </div>
         </div>
     </section>
@@ -2414,9 +2597,11 @@
         <div class="team-container">
             <h2>Our Team</h2>
             
+            <!-- Leadership Section -->
             <div class="team-category">
                 <h3>Leadership</h3>
                 <div class="team-row">
+                    <!-- Dean -->
                     <div class="leadership-card">
                         <div class="leadership-img">
                             <div class="leadership-img-placeholder">
@@ -2427,11 +2612,12 @@
                             <h4>Dr. Pranab Muhuri</h4>
                             <p>Dean</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
                     
+                    <!-- Associate Dean -->
                     <div class="leadership-card">
                         <div class="leadership-img">
                             <div class="leadership-img-placeholder">
@@ -2442,16 +2628,18 @@
                             <h4>Dr. Reshma Rastogi</h4>
                             <p>Associate Dean</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Faculty Advisors Section -->
             <div class="team-category">
                 <h3>Faculty Advisors</h3>
                 <div class="team-row">
+                    <!-- Chief Branch Counsellor -->
                     <div class="leadership-card">
                         <div class="leadership-img">
                             <div class="leadership-img-placeholder">
@@ -2462,11 +2650,12 @@
                             <h4>Dr. Shashank Sheshar Singh</h4>
                             <p>Chief Branch Counsellor</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
                     
+                    <!-- Faculty Advisor 2 -->
                     <div class="leadership-card">
                         <div class="leadership-img">
                             <div class="leadership-img-placeholder">
@@ -2477,11 +2666,12 @@
                             <h4>Dr. Taniya Seth</h4>
                             <p>Faculty Advisor</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
                     
+                    <!-- Faculty Advisor 3 -->
                     <div class="leadership-card">
                         <div class="leadership-img">
                             <div class="leadership-img-placeholder">
@@ -2492,13 +2682,14 @@
                             <h4>Dr. Ashwini B</h4>
                             <p>Faculty Advisor</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Student President -->
             <div class="team-category">
                 <h3>Student Leadership</h3>
                 <div class="team-row">
@@ -2512,16 +2703,18 @@
                             <h4>Shubham Yadav</h4>
                             <p>Student President</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Teams Section -->
             <div class="team-category">
                 <h3>Our Teams</h3>
                 <div class="team-cards-container">
+                    <!-- Technical Team -->
                     <div class="team-card technical">
                         <div class="team-content">
                             <h2 class="team-title">Technical</h2>
@@ -2539,9 +2732,10 @@
                         </div>
                     </div>
                     
+                    <!-- Research & Development -->
                     <div class="team-card research">
                         <div class="team-content">
-                            <h2 class="team-title">Research & Development</h2>
+                            <h2 class="team-title title-small">Research & Development</h2>
                             <div class="explore-container" data-team="research">
                                 <div class="explore-bottom"></div>
                                 <div class="explore-cover explore-cut"></div>
@@ -2556,6 +2750,7 @@
                         </div>
                     </div>
                     
+                    <!-- Finance -->
                     <div class="team-card finance">
                         <div class="team-content">
                             <h2 class="team-title">Finance</h2>
@@ -2573,6 +2768,7 @@
                         </div>
                     </div>
                     
+                    <!-- Design & Media -->
                     <div class="team-card design">
                         <div class="team-content">
                             <h2 class="team-title">Design & Media</h2>
@@ -2590,6 +2786,7 @@
                         </div>
                     </div>
                     
+                    <!-- Public Relations -->
                     <div class="team-card pr">
                         <div class="team-content">
                             <h2 class="team-title">Public Relations</h2>
@@ -2607,9 +2804,11 @@
                         </div>
                     </div>
                     
+                    <!-- Event Management -->
                     <div class="team-card events">
                         <div class="team-content">
-                            <h2 class="team-title">Event Management</h2>
+                            <h2 class="team-title title-small">Event
+                              Management</h2>
                             <div class="explore-container" data-team="events">
                                 <div class="explore-bottom"></div>
                                 <div class="explore-cover explore-cut"></div>
@@ -2624,9 +2823,10 @@
                         </div>
                     </div>
                     
+                    <!-- Documentation & Outreach -->
                     <div class="team-card documentation-outreach">
                         <div class="team-content">
-                            <h2 class="team-title">Documentation & Outreach</h2>
+                            <h2 class="team-title">Docs & Outreach</h2>
                             <div class="explore-container" data-team="documentation-outreach">
                                 <div class="explore-bottom"></div>
                                 <div class="explore-cover explore-cut"></div>
@@ -2646,21 +2846,96 @@
     </section>
     
     <section id="events" class="full-screen-section light-bg">
-        <div class="content-wrapper">
+        <div class="events-container">
             <h2>Events</h2>
-            <h3 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; color: #D4AF37; margin-bottom: 1rem; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);">AvishkarX</h3>
-            <p style="font-size: 1.2rem; line-height: 1.7; color: #cccccc; text-align: center; max-width: 700px;">
-                AvishkarX is the flagship ideathon of the CSI-SAU Student Chapter—an exciting, fast-paced innovation marathon where bright minds collaborate to solve real-world challenges. Participants form teams, brainstorm game-changing solutions, and pitch their ideas to a panel of experts. AvishkarX is more than just a competition; it's a launchpad for turning brilliant ideas into action, fostering learning, and building connections that last.
-            </p>
+            
+            <div class="event-card">
+                <div class="event-banner">
+                    <h3>AVISHKARX</h3>
+                    <div class="teddy-bear-container" id="teddy-bear"></div>
+                </div>
+                
+                <div class="event-content">
+                    <div class="event-header">
+                        <div class="event-details">
+                            <h2>AvishkarX</h2>
+                            
+                            <div class="event-date">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                </svg>
+                                <span>November 14-15th, 2025</span>
+                            </div>
+                            
+                            <p class="event-description">
+                                AvishkarX is CSI SAU's flagship annual tech fest, bringing together the brightest minds in technology and innovation. This three-day extravaganza features cutting-edge workshops, hackathons, technical competitions, and keynote sessions from industry leaders. Join us for an unforgettable experience of learning, networking, and technological exploration.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <button class="event-register-btn" disabled>Registration Closed</button>
+                </div>
+            </div>
         </div>
     </section>
     
-    <section id="contact" class="full-screen-section dark-bg">
-        <div class="content-wrapper">
-            <h2>Contact</h2>
-            <p>Content for the contact section will go here.</p>
+    <section id="contact" class="contact-section">
+    <canvas id="contact-particles"></canvas>
+
+    <div class="contact-content">
+
+        <h2 class="contact-title">
+    <span class="contact-accent"></span>
+    Contact Us
+    <span class="contact-accent"></span>
+</h2>
+
+
+        <div class="contact-grid">
+
+            <!-- LEFT SIDE -->
+            <div class="contact-info">
+                <div class="info-block">
+                    <h3>ADDRESS</h3>
+                    <p>
+                        South Asian University<br>
+                        Akbar Bhawan, Chanakyapuri<br>
+                        New Delhi, India<br>
+                        <i>(Placeholder — replace if needed)</i>
+                    </p>
+                </div>
+
+                <div class="info-block">
+                    <h3>EMAIL</h3>
+                    <p>csi.southasianuniversity@gmail.com</p>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE (FORM) -->
+            <form action="https://formsubmit.co/csi.southasianuniversity@gmail.com" 
+                  method="POST" class="contact-form">
+
+                <input type="hidden" name="_captcha" value="false">
+
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input 
+    type="email" 
+    name="email" 
+    placeholder="Your Email" 
+    required
+    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$"
+    title="Enter a valid email address (example: user@example.com)"
+>
+
+                <textarea name="query" placeholder="Your Query" rows="5" required></textarea>
+
+                <button type="submit">SEND MESSAGE</button>
+
+            </form>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <svg class="sr-only">
         <filter id="spotlight">
@@ -2731,8 +3006,6 @@
         </filter>
     </svg>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
     <script>
         // --- Binary Rain Animation Logic ---
         const canvas = document.getElementById('binary-rain-canvas');
@@ -2782,7 +3055,7 @@
             startRain();
             
             // 2. Set up sequence
-            const animationDuration = 980; 
+            const animationDuration = 950; 
             const fadeDuration = 1000;      
                                             
             // 3. Start crossfade
@@ -2821,37 +3094,160 @@
         gsap.registerPlugin(ScrollTrigger);
 
         /* ================
-        SIMPLIFIED NAVBAR LOGIC
+        NAVBAR LOGIC
         ================
         */
+        const config = {
+            spotlight: {
+                speed: 0.25,
+                deviation: 0.8,
+                surface: 0.5,
+                specular: 8,
+                exponent: 65,
+                light: 'hsla(0, 0%, 100%, 0.7)',
+                x: 0,
+                y: 54,
+                z: 82,
+                pointer: false,
+            },
+            ambience: {
+                deviation: 0.8,
+                surface: 0.5,
+                specular: 25,
+                exponent: 65,
+                light: 'hsla(0, 0%, 100%, 0.4)',
+                x: 120,
+                y: -154,
+                z: 160,
+            },
+        }
+
         const nav = document.querySelector('nav')
         const links = nav.querySelectorAll('a')
+        const spotlightfeGaussianBlur = document.querySelector(
+            '#spotlight feGaussianBlur'
+        )
+        const spotlightfeSpecularLighting = document.querySelector(
+            '#spotlight feSpecularLighting'
+        )
+        const spotlightfePointLight = document.querySelector('#spotlight fePointLight')
+        const ambiencefeGaussianBlur = document.querySelector(
+            '#ambience feGaussianBlur'
+        )
+        const ambiencefeSpecularLighting = document.querySelector(
+            '#ambience feSpecularLighting'
+        )
+        const ambiencefePointLight = document.querySelector('#ambience fePointLight')
 
-        const selectAnchor = (anchor) => {
-            for (const link of links) {
-                link.dataset.active = (anchor === link);
-            }
+        const syncLight = ({ x, y }) => {
+            const navBounds = nav.getBoundingClientRect()
+            spotlightfePointLight.setAttribute('x', Math.floor(x - navBounds.x))
+            spotlightfePointLight.setAttribute('y', Math.floor(y - navBounds.y))
         }
+        let monitoring = false
         
         const update = window.runNavUpdate = () => {
+            
             setTimeout(() => {
+                // set spotlight
+                spotlightfeGaussianBlur.setAttribute(
+                    'stdDeviation',
+                    config.spotlight.deviation
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'surfaceScale',
+                    config.spotlight.surface
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'specularConstant',
+                    config.spotlight.specular
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'specularExponent',
+                    config.spotlight.exponent
+                )
+                spotlightfeSpecularLighting.setAttribute(
+                    'lighting-color',
+                    config.spotlight.light
+                )
+                // set ambience
+                ambiencefeGaussianBlur.setAttribute('stdDeviation', config.ambience.deviation)
+                ambiencefeSpecularLighting.setAttribute(
+                    'surfaceScale',
+                    config.ambience.surface
+                )
+                ambiencefeSpecularLighting.setAttribute(
+                    'specularConstant',
+                    config.ambience.specular
+                )
+                ambiencefeSpecularLighting.setAttribute(
+                    'specularExponent',
+                    config.ambience.exponent
+                )
+                ambiencefeSpecularLighting.setAttribute(
+                    'lighting-color',
+                    config.ambience.light
+                )
                 const anchor = document.querySelector('[data-active="true"]')
                 if (!anchor) return; 
 
-                // === Run scroll animations *after* nav is set up ===
+                const navBounds = nav.getBoundingClientRect()
+                const anchorBounds = anchor.getBoundingClientRect()
+
+                spotlightfePointLight.setAttribute(
+                    'x',
+                    anchorBounds.left -
+                        navBounds.left +
+                        anchorBounds.width * 0.5 +
+                        config.spotlight.x
+                )
+                spotlightfePointLight.setAttribute('y', config.spotlight.y)
+                spotlightfePointLight.setAttribute('z', config.spotlight.z)
+
+                ambiencefePointLight.setAttribute('x', config.ambience.x)
+                ambiencefePointLight.setAttribute('y', config.ambience.y)
+                ambiencefePointLight.setAttribute('z', config.ambience.z)
+
+                if (config.spotlight.pointer && !monitoring) {
+                    monitoring = true
+                    nav.dataset.pointerLighting = true
+                    window.addEventListener('pointermove', syncLight)
+                } else if (!config.spotlight.pointer) {
+                    monitoring = false
+                    nav.dataset.pointerLighting = false
+                    window.removeEventListener('pointermove', syncLight)
+                }
+                
+                // === NEW: Run scroll animations *after* nav is set up ===
                 setupScrollAnimations();
                 
             }, 0); 
         }
 
-        nav.addEventListener('click', (event) => {
-            if (event.target.tagName === 'A' || event.target.closest('a')) {
-                selectAnchor(event.target.closest('a'));
+        const selectAnchor = (anchor) => {
+            if (!config.pointer) {
+                const navBounds = nav.getBoundingClientRect()
+                const anchorBounds = anchor.getBoundingClientRect()
+                for (const link of links) link.dataset.active = anchor === link
+                gsap.to(spotlightfePointLight, {
+                    duration: config.spotlight.speed,
+                    attr: {
+                        x:
+                            anchorBounds.left -
+                            navBounds.left +
+                            anchorBounds.width * 0.5 +
+                            config.spotlight.x,
+                    },
+                })
             }
+        }
+
+        nav.addEventListener('click', (event) => {
+            if (event.target.tagName === 'A') selectAnchor(event.target)
         })
 
         /* ================
-        SCROLL ANIMATION LOGIC
+        NEW: SCROLL ANIMATION LOGIC
         ================
         */
         function setupScrollAnimations() {
@@ -2905,7 +3301,7 @@
                 }
                 
                 
-                const link = document.querySelector(`nav ul li a[href="#${section.id}"]`);
+                const link = document.querySelector(`nav ul.content li a[href="#${section.id}"]`);
 
                 if (link) {
                     ScrollTrigger.create({
@@ -3019,51 +3415,78 @@
                 ease: "power2.out",
                 delay: 0.3
             });
+            
+            // NEW: Events section animations
+            const eventsSection = document.getElementById('events');
+            const eventCard = document.querySelector('.event-card');
+
+            // Animate event card
+            gsap.from(eventCard, {
+                scrollTrigger: {
+                    trigger: eventsSection,
+                    start: "top 80%",
+                    end: "top 30%",
+                    scrub: true,
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1.2,
+                ease: "power2.out"
+            });
         }
+        document.addEventListener("DOMContentLoaded", () => {
+
+    const canvas = document.getElementById("contact-particles");
+    if (!canvas) return; // prevents any null errors
+
+    const ctx = canvas.getContext("2d");
+
+    function resizeParticles() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+    resizeParticles();
+    window.addEventListener("resize", resizeParticles);
+
+    const particles = [];
+    const COUNT = 50; // tweak if needed
+
+    for (let i = 0; i < COUNT; i++) {
+        particles.push({
+            x: Math.random() * canvas.offsetWidth,
+            y: Math.random() * canvas.offsetHeight,
+            s: Math.random() * 1.4 + 0.6,
+            v: Math.random() * 0.7 + 0.2,
+        });
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#D4AF37";
+
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+            ctx.fill();
+
+            // upward float
+            p.y -= p.v;
+
+            // reset when out of frame
+            if (p.y < -10) p.y = canvas.height + 10;
+        });
+
+        requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+});
+
     </script>
     
     <script>
+        
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- NEW: Mobile Nav Toggle Logic ---
-            const mainHeader = document.getElementById('main-header');
-            const navToggle = document.getElementById('mobile-nav-toggle');
-            const mobileNavLinks = document.querySelectorAll('#main-header nav ul li a');
-            const mobileRegisterBtn = document.getElementById('register-btn'); // Also a link
-
-            const toggleMobileNav = () => {
-                const isActive = mainHeader.classList.toggle('mobile-nav-active');
-                if (isActive) {
-                    document.body.style.overflow = 'hidden'; // Lock scroll
-                } else {
-                    document.body.style.overflow = ''; // Unlock scroll
-                }
-            };
-
-            if (navToggle) {
-                navToggle.addEventListener('click', toggleMobileNav);
-            }
-
-            // Function to close menu
-            const closeMobileNav = () => {
-                if (mainHeader && mainHeader.classList.contains('mobile-nav-active')) {
-                    mainHeader.classList.remove('mobile-nav-active');
-                    document.body.style.overflow = ''; // Unlock scroll
-                }
-            };
-
-            // Close menu when a link is clicked
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', closeMobileNav);
-            });
-            
-            // Also close when register button is clicked
-            if (mobileRegisterBtn) {
-                mobileRegisterBtn.addEventListener('click', () => {
-                    // The modal logic will run, *and* we close the nav if it's open.
-                    closeMobileNav();
-                });
-            }
             
             // --- MODAL LOGIC ---
             const registerBtn = document.getElementById('register-btn');
@@ -3071,40 +3494,26 @@
             const modalCloseBtn = document.getElementById('modal-close-btn');
 
             const openModal = () => {
-                if (registerBtn) {
-                    registerBtn.classList.add('clicked');
-                }
+                registerBtn.classList.add('clicked');
                 setTimeout(() => {
-                    if (modalOverlay) {
-                        modalOverlay.classList.add('visible');
-                    }
-                    if (registerBtn) {
-                        registerBtn.classList.remove('clicked'); 
-                    }
+                    modalOverlay.classList.add('visible');
+                    registerBtn.classList.remove('clicked'); 
                 }, 150); 
             };
 
             const closeModal = () => {
-                if (modalOverlay) {
-                    modalOverlay.classList.remove('visible');
-                }
+                modalOverlay.classList.remove('visible');
             };
 
-            if (registerBtn) {
-                registerBtn.addEventListener('click', openModal);
-            }
-            if (modalCloseBtn) {
-                modalCloseBtn.addEventListener('click', closeModal);
-            }
-            if (modalOverlay) {
-                modalOverlay.addEventListener('click', (event) => {
-                    if (event.target === modalOverlay) {
-                        closeModal();
-                    }
-                });
-            }
+            registerBtn.addEventListener('click', openModal);
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (event) => {
+                if (event.target === modalOverlay) {
+                    closeModal();
+                }
+            });
             document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('visible')) {
+                if (event.key === 'Escape' && modalOverlay.classList.contains('visible')) {
                     closeModal();
                 }
             });
@@ -3121,8 +3530,6 @@
                 const count = 110;
                 const size = 50;
                 
-                if (!bottom || !overlay) return;
-
                 for (let i = 0; i <= count; i += 1) {
                     const dot = document.createElement("div");
                     dot.classList.add("explore-dot");
@@ -3262,15 +3669,11 @@
                 // Initialize Three.js
                 function initThree() {
                     const container = document.getElementById('wave-background-container');
-                    if (!container) return; // Exit if element not found
                     width = container.clientWidth;
                     height = container.clientHeight;
                     
-                    const canvas = document.getElementById(config.el);
-                    if (!canvas) return; // Exit if canvas not found
-                    
                     renderer = new THREE.WebGLRenderer({ 
-                        canvas: canvas, 
+                        canvas: document.getElementById(config.el), 
                         antialias: true, 
                         alpha: false 
                     });
@@ -3351,7 +3754,6 @@
                 }
 
                 function animatePlane() {
-                    if (!plane) return; // Guard
                     const gArray = plane.geometry.attributes.position.array;
                     const time = Date.now() * 0.00008; // Very slow animation
                     
@@ -3375,7 +3777,6 @@
                 }
 
                 function animateLights() {
-                    if (!scene) return; // Guard
                     const time = Date.now() * 0.0002; // Very slow light movement
                     const d = 30; // Reduced movement range
                     
@@ -3400,7 +3801,6 @@
 
                 function updateSize() {
                     const container = document.getElementById('wave-background-container');
-                    if (!container) return;
                     width = container.clientWidth;
                     height = container.clientHeight;
                     
@@ -3429,8 +3829,345 @@
 
             // Initialize wave background when the page loads
             initWaveBackground();
+            
+            // --- 3D TEDDY BEAR FOR EVENTS SECTION ---
+            function initTeddyBear() {
+                let scene, camera, renderer;
+                let bearHeadGroup, leftEye, rightEye, leftPupilGroup, rightPupilGroup;
+                let leftEyebrow, rightEyebrow; // Eyebrow variables
+                
+                const clock = new THREE.Clock();
+                const mousePos = new THREE.Vector2();
+                
+                let leftPupilInitialPos = new THREE.Vector3();
+                let rightPupilInitialPos = new THREE.Vector3();
+                const maxPupilMove = 0.08; 
+
+                // --- Texture Helper Functions ---
+                function createGradientTexture(colorCenter, colorEdge) {
+                    const size = 256;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const context = canvas.getContext('2d');
+                    
+                    // 1. Draw the gradient
+                    const gradient = context.createRadialGradient(size / 2, size / 2, size / 4, size / 2, size / 2, size / 2);
+                    gradient.addColorStop(0, colorCenter);
+                    gradient.addColorStop(1, colorEdge);
+                    
+                    context.fillStyle = gradient;
+                    context.fillRect(0, 0, size, size);
+
+                    // 2. Draw Freckles
+                    context.fillStyle = 'rgba(166, 124, 86, 0.2)'; 
+                    for (let i = 0; i < 200; i++) {
+                        const x = Math.random() * size;
+                        const y = Math.random() * size;
+                        // Only draw if it's within the main circle area
+                        if (Math.sqrt(Math.pow(x - size/2, 2) + Math.pow(y - size/2, 2)) < size / 2.2) {
+                             context.beginPath();
+                             context.arc(x, y, Math.random() * 1.5, 0, 2 * Math.PI);
+                             context.fill();
+                        }
+                    }
+                    return new THREE.CanvasTexture(canvas);
+                }
+
+                function createBlushTexture() {
+                    const size = 128;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const context = canvas.getContext('2d');
+                    
+                    const gradient = context.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+                    gradient.addColorStop(0.2, 'rgba(240, 160, 160, 0.7)');
+                    gradient.addColorStop(1, 'rgba(240, 160, 160, 0)');
+                    
+                    context.fillStyle = gradient;
+                    context.fillRect(0, 0, size, size);
+                    
+                    return new THREE.CanvasTexture(canvas);
+                }
+
+                // --- Main Setup ---
+                function init() {
+                    scene = new THREE.Scene();
+                    scene.background = null; 
+
+                    camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+                    camera.position.z = 4;
+
+                    const container = document.getElementById('teddy-bear');
+                    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    renderer.setSize(container.offsetWidth, container.offsetHeight);
+                    container.appendChild(renderer.domElement);
+
+                    createBear();
+
+                    // Add event listeners to the event card for mouse interaction
+                    const eventCard = document.querySelector('.event-card');
+                    eventCard.addEventListener('mousemove', onDocumentMouseMove);
+                    eventCard.addEventListener('mouseleave', onMouseLeave);
+
+                    animate();
+                }
+
+                function createBear() {
+                    bearHeadGroup = new THREE.Group();
+                    bearHeadGroup.scale.set(0.6, 0.6, 0.6);
+                    scene.add(bearHeadGroup);
+
+                    // --- Materials ---
+                    const bearMaterial = new THREE.MeshBasicMaterial({
+                        map: createGradientTexture('#e0ac81', '#a67c56')
+                    });
+                    const snoutMaterial = new THREE.MeshBasicMaterial({
+                        map: createGradientTexture('#f0d5bc', '#e6c1a1')
+                    });
+                    const innerEarMaterial = new THREE.MeshBasicMaterial({
+                        map: createGradientTexture('#e8c4a4', '#b57e55')
+                    });
+                    const blushMaterial = new THREE.MeshBasicMaterial({
+                        map: createBlushTexture(),
+                        transparent: true
+                    });
+                    const eyeBaseMaterial = new THREE.MeshBasicMaterial({ color: 0x5c3d3a });
+                    const pupilMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                    const noseMaterial = new THREE.MeshBasicMaterial({ color: 0x5c6a79 });
+                    const smileMaterial = new THREE.MeshBasicMaterial({ color: 0x8a6a4c });
+                    const eyebrowMat = new THREE.MeshBasicMaterial({ color: 0x5c3d3a }); // Eyebrow color
+
+                    // --- Geometries ---
+                    
+                    // Head (NEW: Wider, flatter, less spherical)
+                    const headGeo = new THREE.SphereGeometry(1.8, 32, 32);
+                    const head = new THREE.Mesh(headGeo, bearMaterial);
+                    head.scale.set(1.2, 1.0, 0.7); // Wider (X), normal height (Y), much flatter depth (Z)
+                    bearHeadGroup.add(head);
+
+                    // Ears (Adjusted slightly for new head shape)
+                    const earGeo = new THREE.SphereGeometry(0.6, 32, 32);
+                    const leftEar = new THREE.Mesh(earGeo, bearMaterial);
+                    leftEar.position.set(-1.8, 1.7, -0.3); // Pushed further out
+                    bearHeadGroup.add(leftEar);
+                    
+                    const rightEar = new THREE.Mesh(earGeo, bearMaterial);
+                    rightEar.position.set(1.8, 1.7, -0.3); // Pushed further out
+                    bearHeadGroup.add(rightEar);
+
+                    // Inner Ears
+                    const innerEarGeo = new THREE.SphereGeometry(0.35, 32, 32);
+                    const leftInnerEar = new THREE.Mesh(innerEarGeo, innerEarMaterial);
+                    leftInnerEar.position.set(-1.8, 1.7, 0.05); // Pushed further out
+                    bearHeadGroup.add(leftInnerEar);
+
+                    const rightInnerEar = new THREE.Mesh(innerEarGeo, innerEarMaterial);
+                    rightInnerEar.position.set(1.8, 1.7, 0.05); // Pushed further out
+                    bearHeadGroup.add(rightInnerEar);
+
+                    // Snout
+                    const snoutGeo = new THREE.SphereGeometry(0.8, 32, 32);
+                    const snout = new THREE.Mesh(snoutGeo, snoutMaterial);
+                    snout.position.set(0, -0.4, 1.3);
+                    snout.scale.set(1.5, 0.8, 0.7);
+                    bearHeadGroup.add(snout);
+
+                    // Nose
+                    const noseGeo = new THREE.SphereGeometry(0.25, 32, 32);
+                    const nose = new THREE.Mesh(noseGeo, noseMaterial);
+                    nose.position.set(0, -0.1, 1.8);
+                    nose.scale.set(1.1, 0.7, 0.7);
+                    bearHeadGroup.add(nose);
+
+                    // Nose Highlight
+                    const noseHighlightGeo = new THREE.SphereGeometry(0.04, 16, 16);
+                    const noseHighlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+                    const noseHighlight = new THREE.Mesh(noseHighlightGeo, noseHighlightMat);
+                    noseHighlight.scale.set(1.8, 1, 1);
+                    noseHighlight.position.set(-0.05, -0.08, 1.95);
+                    noseHighlight.rotation.z = THREE.MathUtils.degToRad(30);
+                    bearHeadGroup.add(noseHighlight);
+                    
+                    // NEW: Smile Lifted, Wider, More Prominent
+                    const smileThickness = 0.04; // Thicker
+                    const smileRadius = 0.5; // Wider
+                    const smileGeo = new THREE.TorusGeometry(smileRadius, smileThickness / 2, 8, 32, Math.PI); // Half torus
+                    const smile = new THREE.Mesh(smileGeo, smileMaterial);
+                    smile.rotation.x = Math.PI; // Flip it to smile
+                    smile.position.set(0, -0.5, 1.6); // Lifted (more positive Y)
+                    bearHeadGroup.add(smile);
+
+                    // Eyes
+                    const eyeOuterGeo = new THREE.SphereGeometry(0.35, 32, 32);
+                    leftEye = new THREE.Mesh(eyeOuterGeo, eyeBaseMaterial);
+                    leftEye.position.set(-0.7, 0.3, 1.4);
+                    bearHeadGroup.add(leftEye);
+
+                    rightEye = new THREE.Mesh(eyeOuterGeo, eyeBaseMaterial);
+                    rightEye.position.set(0.7, 0.3, 1.4);
+                    bearHeadGroup.add(rightEye);
+                    
+                    // 2-Part Pupils
+                    leftPupilGroup = new THREE.Group();
+                    rightPupilGroup = new THREE.Group();
+
+                    const mainPupilGeo = new THREE.SphereGeometry(0.1, 32, 32);
+                    const subPupilGeo = new THREE.SphereGeometry(0.05, 32, 32);
+
+                    const leftMainPupil = new THREE.Mesh(mainPupilGeo, pupilMaterial);
+                    const leftSubPupil = new THREE.Mesh(subPupilGeo, pupilMaterial);
+                    leftSubPupil.position.set(0.05, -0.06, 0);
+                    leftPupilGroup.add(leftMainPupil, leftSubPupil);
+                    
+                    const rightMainPupil = new THREE.Mesh(mainPupilGeo, pupilMaterial);
+                    const rightSubPupil = new THREE.Mesh(subPupilGeo, pupilMaterial);
+                    rightSubPupil.position.set(0.05, -0.06, 0);
+                    rightPupilGroup.add(rightMainPupil, rightSubPupil);
+
+                    leftPupilGroup.position.set(-0.7, 0.3, 1.7);
+                    rightPupilGroup.position.set(0.7, 0.3, 1.7);
+                    
+                    leftPupilInitialPos.copy(leftPupilGroup.position);
+                    rightPupilInitialPos.copy(rightPupilGroup.position);
+
+                    bearHeadGroup.add(leftPupilGroup, rightPupilGroup);
+
+                    // NEW: Perfectly Horizontal Curved Eyebrows
+                    const eyebrowThickness = 0.03;
+                    const eyebrowRadius = 0.3; // Curve radius
+                    const eyebrowArc = Math.PI / 1.5; // Arc length (e.g., 120 degrees)
+
+                    const eyebrowGeo = new THREE.TorusGeometry(eyebrowRadius, eyebrowThickness / 2, 8, 32, eyebrowArc);
+
+                    leftEyebrow = new THREE.Mesh(eyebrowGeo, eyebrowMat);
+                    leftEyebrow.position.set(-0.7, 0.6, 1.5); // Position above left eye
+                    leftEyebrow.rotation.set(0, 0, THREE.MathUtils.degToRad(40)); // Rotate to be horizontal
+                    bearHeadGroup.add(leftEyebrow);
+                    
+                    rightEyebrow = new THREE.Mesh(eyebrowGeo, eyebrowMat);
+                    rightEyebrow.position.set(0.7, 0.6, 1.5); // Position above right eye
+                    rightEyebrow.rotation.set(0, 0, THREE.MathUtils.degToRad(35)); // Rotate to be horizontal
+                    bearHeadGroup.add(rightEyebrow);
+
+
+                    // Blush (Adjusted for new head shape)
+                    const blushGeo = new THREE.SphereGeometry(0.4, 32, 32);
+                    const leftBlush = new THREE.Mesh(blushGeo, blushMaterial);
+                    leftBlush.position.set(-0.95, -0.1, 1.2); 
+                    leftBlush.scale.set(1, 0.6, 1);
+                    bearHeadGroup.add(leftBlush);
+                    
+                    const rightBlush = new THREE.Mesh(blushGeo, blushMaterial);
+                    rightBlush.position.set(0.95, -0.1, 1.2); 
+                    rightBlush.scale.set(1, 0.6, 1);
+                    bearHeadGroup.add(rightBlush);
+                }
+
+                // --- Event Handlers (Global) ---
+                function onDocumentMouseMove(event) {
+                    const rect = document.querySelector('.event-card').getBoundingClientRect();
+                    mousePos.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                    mousePos.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                }
+
+                function onMouseLeave(event) {
+                    mousePos.x = 0;
+                    mousePos.y = 0;
+                }
+
+                function lerp(start, end, t) {
+                    return start * (1 - t) + end * t;
+                }
+
+                // --- Animation Loop ---
+                function animate() {
+                    requestAnimationFrame(animate);
+                    
+                    const elapsedTime = clock.getElapsedTime();
+
+                    // 1. Breathing
+                    if (bearHeadGroup) {
+                        bearHeadGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.03; 
+                    }
+
+                    // 2. Blinking
+                    const blinkCycle = elapsedTime % 4; 
+                    let blinkScale = 1.0;
+                    if (blinkCycle > 3.8) {
+                        blinkScale = 0.1;
+                    }
+                    if (leftEye) {
+                        leftEye.scale.y = blinkScale;
+                        rightEye.scale.y = blinkScale;
+                        leftPupilGroup.visible = blinkScale === 1.0;
+                        rightPupilGroup.visible = blinkScale === 1.0;
+                    }
+
+                    // 3. Head Tilt
+                    if (bearHeadGroup) {
+                        const maxHeadTilt = 0.08;
+                        const targetRotationX = -mousePos.y * maxHeadTilt;
+                        const targetRotationY = mousePos.x * maxHeadTilt; 
+
+                        bearHeadGroup.rotation.x = lerp(bearHeadGroup.rotation.x, targetRotationX, 0.1);
+                        bearHeadGroup.rotation.y = lerp(bearHeadGroup.rotation.y, targetRotationY, 0.1);
+                    }
+
+                    // 4. 2D Eye Follow
+                    const pupilTargetX = mousePos.x * maxPupilMove;
+                    const pupilTargetY = mousePos.y * maxPupilMove;
+
+                    if (leftPupilGroup) {
+                        leftPupilGroup.position.x = lerp(leftPupilGroup.position.x, leftPupilInitialPos.x + pupilTargetX, 0.1);
+                        leftPupilGroup.position.y = lerp(leftPupilGroup.position.y, leftPupilInitialPos.y + pupilTargetY, 0.1);
+                        
+                        rightPupilGroup.position.x = lerp(rightPupilGroup.position.x, rightPupilInitialPos.x + pupilTargetX, 0.1);
+                        rightPupilGroup.position.y = lerp(rightPupilGroup.position.y, rightPupilInitialPos.y + pupilTargetY, 0.1);
+                    }
+                    
+                    renderer.render(scene, camera);
+                }
+
+                init();
+            }
+
+            // Initialize teddy bear when the page loads
+            initTeddyBear();
         });
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const disposableDomains = [
+        "tempmail.com", "10minutemail.com", "mailinator.com",
+        "guerrillamail.com", "throwawaymail.com", "sharklasers.com",
+        "yopmail.com", "discard.email", "trashmail.com", 
+        "temporary-mail.net", "fakeinbox.com"
+    ];
+
+    const emailInput = document.querySelector('#contact input[name="email"]') ||
+                       document.querySelector('.contact-form input[name="email"]');
+
+    const form = document.querySelector(".contact-form");
+
+    if (!emailInput || !form) return;
+
+    form.addEventListener("submit", (e) => {
+        const email = emailInput.value.trim().toLowerCase();
+        const domain = email.split("@")[1];
+
+        // check disposable domains
+        if (disposableDomains.includes(domain)) {
+            e.preventDefault();
+            alert("Disposable / temporary emails are not allowed. Please use a valid email.");
+            emailInput.focus();
+            return;
+        }
+    });
+});
+</script>
+
 
 </body>
-</html>
+</html> 
