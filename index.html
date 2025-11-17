@@ -27,18 +27,24 @@
 MOBILE NAVBAR STYLES
 ======================================== */
 
-/* Mobile Navbar Container */
+/* ========================================
+FROSTED GLASS MOBILE NAVBAR STYLES
+======================================== */
+
+/* Mobile Navbar Container - Frosted Glass */
 .mobile-nav {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(10, 10, 10, 0.7); /* More transparent */
+    backdrop-filter: blur(20px) saturate(180%); /* Strong frosted glass effect */
+    -webkit-backdrop-filter: blur(20px) saturate(180%); /* Safari support */
     z-index: 1000;
     padding: 15px 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
 .mobile-nav-container {
@@ -48,52 +54,163 @@ MOBILE NAVBAR STYLES
     width: 100%;
 }
 
-/* Mobile Logo */
+/* Enhanced CSI SAU Logo */
 .mobile-nav-logo {
     font-family: 'Orbitron', sans-serif;
     font-weight: 700;
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ffffff 0%, #D4AF37 50%, #3498db 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    position: relative;
+    padding: 5px 0;
 }
 
-/* Hamburger Menu */
+.mobile-nav-logo::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    opacity: 0.7;
+}
+
+/* Advanced Animated Hamburger Menu */
 .hamburger-menu {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 30px;
-    height: 21px;
+    width: 32px;
+    height: 24px;
     cursor: pointer;
     z-index: 1001;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    padding: 4px;
+}
+
+.hamburger-menu:hover {
+    transform: scale(1.15);
 }
 
 .hamburger-menu span {
     display: block;
     height: 3px;
     width: 100%;
-    background-color: #fff;
-    border-radius: 3px;
-    transition: all 0.3s ease;
+    background: linear-gradient(90deg, #3498db, #D4AF37);
+    border-radius: 2px;
+    transition: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+    position: relative;
 }
 
-/* Mobile Menu */
+/* Top line - animated movement */
+.hamburger-menu span:nth-child(1) {
+    transform-origin: left center;
+    animation: hamburgerTopIdle 2s ease-in-out infinite;
+}
+
+/* Middle line - pulsing animation */
+.hamburger-menu span:nth-child(2) {
+    transform-origin: center center;
+    animation: hamburgerMiddleIdle 2s ease-in-out infinite;
+}
+
+/* Bottom line - animated movement */
+.hamburger-menu span:nth-child(3) {
+    transform-origin: left center;
+    animation: hamburgerBottomIdle 2s ease-in-out infinite;
+}
+
+/* Idle state animations */
+@keyframes hamburgerTopIdle {
+    0%, 100% { transform: translateY(0) scaleX(1); }
+    50% { transform: translateY(-1px) scaleX(1.05); }
+}
+
+@keyframes hamburgerMiddleIdle {
+    0%, 100% { opacity: 1; transform: scaleX(1); }
+    50% { opacity: 0.8; transform: scaleX(0.9); }
+}
+
+@keyframes hamburgerBottomIdle {
+    0%, 100% { transform: translateY(0) scaleX(1); }
+    50% { transform: translateY(1px) scaleX(1.05); }
+}
+
+/* Active state - Transform to X with advanced animations */
+.hamburger-menu.active {
+    transform: rotate(180deg) scale(1.1);
+}
+
+.hamburger-menu.active span:nth-child(1) {
+    animation: none;
+    transform: translateY(10.5px) rotate(45deg) scaleX(1.2);
+    background: linear-gradient(90deg, #D4AF37, #FFD700);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    border-radius: 1px;
+}
+
+.hamburger-menu.active span:nth-child(2) {
+    animation: none;
+    transform: scale(0) rotate(45deg);
+    opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+    animation: none;
+    transform: translateY(-10.5px) rotate(-45deg) scaleX(1.2);
+    background: linear-gradient(90deg, #D4AF37, #FFD700);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    border-radius: 1px;
+}
+
+/* Hover effects when active */
+.hamburger-menu.active:hover span {
+    background: linear-gradient(90deg, #FFD700, #ffffff);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+}
+
+/* Frosted Glass Mobile Menu */
 .mobile-menu {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 80%;
-    max-width: 300px;
+    width: 85%;
+    max-width: 320px;
     height: 100vh;
-    background: rgba(10, 10, 10, 0.98);
-    backdrop-filter: blur(15px);
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     z-index: 999;
-    padding: 80px 20px 20px;
-    transition: right 0.4s ease;
+    padding: 100px 25px 30px;
+    transition: right 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.6);
 }
 
 .mobile-menu.active {
     right: 0;
+}
+
+/* Menu header effect */
+.mobile-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #D4AF37, #3498db, transparent);
+    opacity: 0.6;
 }
 
 .mobile-menu ul {
@@ -103,79 +220,128 @@ MOBILE NAVBAR STYLES
 }
 
 .mobile-menu li {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.mobile-menu.active li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Stagger the menu item animations */
+.mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+.mobile-menu.active li:nth-child(2) { transition-delay: 0.15s; }
+.mobile-menu.active li:nth-child(3) { transition-delay: 0.2s; }
+.mobile-menu.active li:nth-child(4) { transition-delay: 0.25s; }
+.mobile-menu.active li:nth-child(5) { transition-delay: 0.3s; }
+
+/* Enhanced mobile menu links */
 .mobile-menu a {
-    display: block;
+    display: flex;
+    align-items: center;
     color: #fff;
     text-decoration: none;
     font-family: 'Roboto', sans-serif;
     font-weight: 600;
     font-size: 1.2rem;
-    padding: 10px 15px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
+    padding: 15px 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-menu a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.2), transparent);
+    transition: left 0.5s ease;
 }
 
 .mobile-menu a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(212, 175, 55, 0.3);
+    transform: translateX(8px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Mobile Register Button */
+.mobile-menu a:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Mobile Register Button */
 .mobile-register-btn {
     display: block;
     width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background-color: transparent;
+    padding: 16px;
+    margin-top: 30px;
+    background: linear-gradient(135deg, transparent, rgba(212, 175, 55, 0.1));
     border: 2px solid #D4AF37;
-    border-radius: 8px;
+    border-radius: 12px;
     color: #D4AF37;
     font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
     text-align: center;
     text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-register-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+    transition: left 0.6s ease;
 }
 
 .mobile-register-btn:hover {
-    background-color: rgba(212, 175, 55, 0.1);
+    background: rgba(212, 175, 55, 0.15);
     color: #FFD700;
+    border-color: #FFD700;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
 }
 
-/* Overlay */
+.mobile-register-btn:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Overlay */
 .mobile-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
     z-index: 998;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 .mobile-overlay.active {
     opacity: 1;
     visibility: visible;
-}
-
-/* Active state for hamburger */
-.hamburger-menu.active span:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
-}
-
-.hamburger-menu.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger-menu.active span:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
 }
 
 /* Gold indicator for mobile */
@@ -185,9 +351,27 @@ MOBILE NAVBAR STYLES
     height: 8px;
     background-color: #f5c837;
     border-radius: 50%;
-    margin-left: 8px;
+    margin-left: 12px;
     animation: pulse-gold 2s infinite;
-    box-shadow: 0 0 8px rgba(212, 175, 55, 0.7);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+    position: relative;
+}
+
+.mobile-gold-indicator::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.3);
+    animation: pulse-gold-outer 2s infinite;
+}
+
+@keyframes pulse-gold-outer {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.5); opacity: 0; }
 }
         
         /* --- Base Nav Styles --- */
@@ -2442,7 +2626,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Sarah Johnson</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="media/linkedinlogo.png" alt="LinkedIn">
+                                <img src="linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2779,7 +2963,7 @@ MOBILE NAVBAR MEDIA QUERIES
         <div class="about-content">
             <div class="about-top">
                 <div class="about-logo-container">
-                    <img src="media/csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
+                    <img src="csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
                 </div>
                 <div class="about-text">
                     <h2>About Us</h2>
@@ -2790,7 +2974,7 @@ MOBILE NAVBAR MEDIA QUERIES
             </div>
             <div class="about-certificate-container">
                 <h3>Official Recognition</h3>
-                <img src="media/certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
+                <img src="certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
             </div>
         </div>
     </section>
@@ -4368,37 +4552,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-// Mobile Navbar Toggle Functionality
+// Enhanced Mobile Navbar Toggle Functionality
 const hamburger = document.querySelector('.hamburger-menu');
 const mobileMenu = document.querySelector('.mobile-menu');
 const overlay = document.querySelector('.mobile-overlay');
 const mobileLinks = document.querySelectorAll('.mobile-menu a');
 const mobileRegisterBtn = document.querySelector('.mobile-register-btn');
 
-// Toggle mobile menu
+// Toggle mobile menu with enhanced animations
 if (hamburger) {
     hamburger.addEventListener('click', function() {
         this.classList.toggle('active');
         mobileMenu.classList.toggle('active');
         overlay.classList.toggle('active');
+        
+        // Add body scroll lock when menu is open
+        if (mobileMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
 }
 
 // Close mobile menu when clicking on overlay
 if (overlay) {
     overlay.addEventListener('click', function() {
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        this.classList.remove('active');
+        closeMobileMenu();
     });
 }
 
 // Close mobile menu when clicking on a link
 mobileLinks.forEach(link => {
     link.addEventListener('click', function() {
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        overlay.classList.remove('active');
+        closeMobileMenu();
     });
 });
 
@@ -4412,15 +4599,26 @@ if (mobileRegisterBtn) {
             registerBtn.click(); // Trigger the PC register button click
         }
         
-        // Close mobile menu after clicking register
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        overlay.classList.remove('active');
+        closeMobileMenu();
     });
 }
+
+// Function to close mobile menu
+function closeMobileMenu() {
+    if (hamburger) hamburger.classList.remove('active');
+    if (mobileMenu) mobileMenu.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Close menu with ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeMobileMenu();
+    }
+});
 </script>
 
 
 </body>
 </html> 
-
