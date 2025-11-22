@@ -22,357 +22,6 @@
         NAV STYLES
         ========================================
         */
-         
-        /* ========================================
-MOBILE NAVBAR STYLES
-======================================== */
-
-/* ========================================
-FROSTED GLASS MOBILE NAVBAR STYLES
-======================================== */
-
-/* Mobile Navbar Container - Frosted Glass */
-.mobile-nav {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(10, 10, 10, 0.7); /* More transparent */
-    backdrop-filter: blur(20px) saturate(180%); /* Strong frosted glass effect */
-    -webkit-backdrop-filter: blur(20px) saturate(180%); /* Safari support */
-    z-index: 1000;
-    padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-}
-
-.mobile-nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-/* Enhanced CSI SAU Logo */
-.mobile-nav-logo {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-    color: #fff;
-    font-size: 1.6rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, #ffffff 0%, #D4AF37 50%, #3498db 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-    position: relative;
-    padding: 5px 0;
-}
-
-.mobile-nav-logo::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
-    opacity: 0.7;
-}
-
-/* Advanced Animated Hamburger Menu */
-.hamburger-menu {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 32px;
-    height: 24px;
-    cursor: pointer;
-    z-index: 1001;
-    position: relative;
-    transition: transform 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
-    padding: 4px;
-}
-
-.hamburger-menu:hover {
-    transform: scale(1.15);
-}
-
-.hamburger-menu span {
-    display: block;
-    height: 3px;
-    width: 100%;
-    background: linear-gradient(90deg, #3498db, #D4AF37);
-    border-radius: 2px;
-    transition: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
-    position: relative;
-}
-
-/* Top line - animated movement */
-.hamburger-menu span:nth-child(1) {
-    transform-origin: left center;
-    animation: hamburgerTopIdle 2s ease-in-out infinite;
-}
-
-/* Middle line - pulsing animation */
-.hamburger-menu span:nth-child(2) {
-    transform-origin: center center;
-    animation: hamburgerMiddleIdle 2s ease-in-out infinite;
-}
-
-/* Bottom line - animated movement */
-.hamburger-menu span:nth-child(3) {
-    transform-origin: left center;
-    animation: hamburgerBottomIdle 2s ease-in-out infinite;
-}
-
-/* Idle state animations */
-@keyframes hamburgerTopIdle {
-    0%, 100% { transform: translateY(0) scaleX(1); }
-    50% { transform: translateY(-1px) scaleX(1.05); }
-}
-
-@keyframes hamburgerMiddleIdle {
-    0%, 100% { opacity: 1; transform: scaleX(1); }
-    50% { opacity: 0.8; transform: scaleX(0.9); }
-}
-
-@keyframes hamburgerBottomIdle {
-    0%, 100% { transform: translateY(0) scaleX(1); }
-    50% { transform: translateY(1px) scaleX(1.05); }
-}
-
-/* Active state - Transform to X with advanced animations */
-.hamburger-menu.active {
-    transform: rotate(180deg) scale(1.1);
-}
-
-.hamburger-menu.active span:nth-child(1) {
-    animation: none;
-    transform: translateY(10.5px) rotate(45deg) scaleX(1.2);
-    background: linear-gradient(90deg, #D4AF37, #FFD700);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
-    border-radius: 1px;
-}
-
-.hamburger-menu.active span:nth-child(2) {
-    animation: none;
-    transform: scale(0) rotate(45deg);
-    opacity: 0;
-}
-
-.hamburger-menu.active span:nth-child(3) {
-    animation: none;
-    transform: translateY(-10.5px) rotate(-45deg) scaleX(1.2);
-    background: linear-gradient(90deg, #D4AF37, #FFD700);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
-    border-radius: 1px;
-}
-
-/* Hover effects when active */
-.hamburger-menu.active:hover span {
-    background: linear-gradient(90deg, #FFD700, #ffffff);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 1);
-}
-
-/* Frosted Glass Mobile Menu */
-.mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 85%;
-    max-width: 320px;
-    height: 100vh;
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(30px) saturate(200%);
-    -webkit-backdrop-filter: blur(30px) saturate(200%);
-    z-index: 999;
-    padding: 100px 25px 30px;
-    transition: right 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-y: auto;
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.6);
-}
-
-.mobile-menu.active {
-    right: 0;
-}
-
-/* Menu header effect */
-.mobile-menu::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #D4AF37, #3498db, transparent);
-    opacity: 0.6;
-}
-
-.mobile-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.mobile-menu li {
-    margin-bottom: 12px;
-    opacity: 0;
-    transform: translateX(60px);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.mobile-menu.active li {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* Stagger the menu item animations */
-.mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
-.mobile-menu.active li:nth-child(2) { transition-delay: 0.15s; }
-.mobile-menu.active li:nth-child(3) { transition-delay: 0.2s; }
-.mobile-menu.active li:nth-child(4) { transition-delay: 0.25s; }
-.mobile-menu.active li:nth-child(5) { transition-delay: 0.3s; }
-
-/* Enhanced mobile menu links */
-.mobile-menu a {
-    display: flex;
-    align-items: center;
-    color: #fff;
-    text-decoration: none;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    font-size: 1.2rem;
-    padding: 15px 20px;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-.mobile-menu a::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.mobile-menu a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(212, 175, 55, 0.3);
-    transform: translateX(8px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.mobile-menu a:hover::before {
-    left: 100%;
-}
-
-/* Enhanced Mobile Register Button */
-.mobile-register-btn {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    margin-top: 30px;
-    background: linear-gradient(135deg, transparent, rgba(212, 175, 55, 0.1));
-    border: 2px solid #D4AF37;
-    border-radius: 12px;
-    color: #D4AF37;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    position: relative;
-    overflow: hidden;
-}
-
-.mobile-register-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
-    transition: left 0.6s ease;
-}
-
-.mobile-register-btn:hover {
-    background: rgba(212, 175, 55, 0.15);
-    color: #FFD700;
-    border-color: #FFD700;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-}
-
-.mobile-register-btn:hover::before {
-    left: 100%;
-}
-
-/* Enhanced Overlay */
-.mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    z-index: 998;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-.mobile-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Gold indicator for mobile */
-.mobile-gold-indicator {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #f5c837;
-    border-radius: 50%;
-    margin-left: 12px;
-    animation: pulse-gold 2s infinite;
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
-    position: relative;
-}
-
-.mobile-gold-indicator::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 50%;
-    background: rgba(212, 175, 55, 0.3);
-    animation: pulse-gold-outer 2s infinite;
-}
-
-@keyframes pulse-gold-outer {
-    0%, 100% { transform: scale(1); opacity: 0.3; }
-    50% { transform: scale(1.5); opacity: 0; }
-}
         
         /* --- Base Nav Styles --- */
         nav {
@@ -486,6 +135,284 @@ FROSTED GLASS MOBILE NAVBAR STYLES
         }
 
         /* ========================================
+PROFESSIONAL MOBILE NAVBAR STYLES
+======================================== */
+
+/* Mobile Navbar Container - Frosted Glass */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+
+}
+
+.mobile-nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Professional CSI SAU Logo with Subtle Animation */
+.mobile-nav-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    padding: 5px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Subtle glow animation for CSI SAU text */
+.mobile-nav-logo::before {
+    content: 'CSI SAU';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: transparent;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(52, 152, 219, 0.3),
+        rgba(212, 175, 55, 0.3),
+        transparent
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: textShimmer 4s ease-in-out infinite;
+    opacity: 0.7;
+}
+
+@keyframes textShimmer {
+    0%, 100% { background-position: -100% 0; }
+    50% { background-position: 100% 0; }
+}
+
+/* Professional Hamburger Menu */
+.hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 1001;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.hamburger-menu span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 1px;
+    transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    transform-origin: center;
+}
+
+/* Perfect X Transformation */
+.hamburger-menu.active span:nth-child(1) {
+    transform: translateY(9.5px) rotate(45deg);
+    background: #D4AF37;
+}
+
+.hamburger-menu.active span:nth-child(2) {
+    transform: scale(0);
+    opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-9.5px) rotate(-45deg);
+    background: #D4AF37;
+}
+
+/* Frosted Glass Mobile Menu */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 300px;
+    height: 100vh;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    z-index: 999;
+    padding: 100px 25px 30px;
+    transition: right 0.4s ease;
+    overflow-y: auto;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-menu li {
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.4s ease;
+}
+
+.mobile-menu.active li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Stagger animations */
+.mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+.mobile-menu.active li:nth-child(2) { transition-delay: 0.15s; }
+.mobile-menu.active li:nth-child(3) { transition-delay: 0.2s; }
+.mobile-menu.active li:nth-child(4) { transition-delay: 0.25s; }
+.mobile-menu.active li:nth-child(5) { transition-delay: 0.3s; }
+
+/* Clean mobile menu links */
+.mobile-menu a {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 12px 18px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-menu a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+/* Professional Mobile Register Button */
+.mobile-register-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 25px;
+    background: transparent;
+    border: 2px solid #D4AF37;
+    border-radius: 8px;
+    color: #D4AF37;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.mobile-register-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: #FFD700;
+    border-color: #FFD700;
+}
+
+/* Overlay */
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Gold indicator for mobile */
+.mobile-gold-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #D4AF37;
+    border-radius: 50%;
+    margin-left: 10px;
+    animation: pulse-gold 2s infinite;
+}
+
+.mobile-gold-indicator::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.3);
+    animation: pulse-gold-outer 2s infinite;
+}
+
+@keyframes pulse-gold-outer {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ========================================
+MOBILE NAVBAR MEDIA QUERIES
+======================================== */
+@media (max-width: 992px) {
+    /* Hide PC navbar on mobile */
+    nav {
+        display: none;
+    }
+    
+    /* Hide PC register button on mobile */
+    #register-btn {
+        display: none !important;
+    }
+    
+    /* Show mobile navbar on mobile */
+    .mobile-nav {
+        display: block;
+    }
+}
+
+@media (min-width: 993px) {
+    /* Hide mobile navbar on PC */
+    .mobile-nav {
+        display: none;
+    }
+}            
+
+
+
+        /* ========================================
         GOLD INDICATOR STYLES
         ========================================
         */
@@ -533,6 +460,7 @@ FROSTED GLASS MOBILE NAVBAR STYLES
         ========================================
         */
         #register-btn {
+            
             position: fixed;
             top: 20px;
             right: 40px; 
@@ -859,6 +787,36 @@ FROSTED GLASS MOBILE NAVBAR STYLES
             font-size: 3.5rem;
             margin-bottom: 1.5rem;
             color: #ffffff;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+        
+        /* NEW: Enhanced header styles */
+        .section-header {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header::before, .section-header::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #3498db, transparent);
+            transform: translateY(-50%);
+        }
+        
+        .section-header::before {
+            right: 100%;
+            margin-right: 20px;
+        }
+        
+        .section-header::after {
+            left: 100%;
+            margin-left: 20px;
         }
         
         /* ========================================
@@ -1035,7 +993,7 @@ FROSTED GLASS MOBILE NAVBAR STYLES
         ========================================
         */
         #team {
-            background-color: #0a0a0a;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
             padding: 4rem 2rem;
             min-height: 100vh;
             height: auto;
@@ -1044,6 +1002,22 @@ FROSTED GLASS MOBILE NAVBAR STYLES
             align-items: center;
             justify-content: flex-start;
             overflow-y: auto;
+            position: relative;
+        }
+
+        /* Add subtle pattern overlay to team section */
+        #team::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+            z-index: 1;
+            pointer-events: none;
         }
 
         .team-container {
@@ -1052,6 +1026,8 @@ FROSTED GLASS MOBILE NAVBAR STYLES
             display: flex;
             flex-direction: column;
             gap: 3rem;
+            position: relative;
+            z-index: 2;
         }
 
         .team-category {
@@ -1304,14 +1280,14 @@ FROSTED GLASS MOBILE NAVBAR STYLES
             margin-top: 1rem;
         }
 
-        .team-title {
+             .team-title {
             font-size: 1rem; /* Adjusted font size */
             font-weight: bold;
             line-height: 1.2;
             color: white;
             font-family: 'Orbitron', sans-serif;
             text-align: center;
-            width: 100%;
+            
             word-wrap: break-word;
             transition: font-size 0.3s ease; /* Smooth transition for font size */
             display: flex;
@@ -1320,8 +1296,8 @@ FROSTED GLASS MOBILE NAVBAR STYLES
             height: 100%;
             margin: 0;
             padding: 0 0.5rem;
-            
-        }
+}
+
         
 
         /* New Professional Explore Button Styles */
@@ -1650,6 +1626,7 @@ FROSTED GLASS MOBILE NAVBAR STYLES
                 transform: translateY(-20px); /* Move title up on hover */
             }
             
+            
             .team-card:focus-within::before,
             .team-card:focus-within::after,
             .team-card:focus-within .team-content,
@@ -1663,7 +1640,7 @@ FROSTED GLASS MOBILE NAVBAR STYLES
         ========================================
         */
         #events {
-            background-color: #0a0f1a;
+            background: linear-gradient(135deg, #0a0f1a 0%, #1a2b5a 50%, #0a0f1a 100%);
             padding: 4rem 2rem;
             min-height: 100vh;
             height: auto;
@@ -1672,6 +1649,22 @@ FROSTED GLASS MOBILE NAVBAR STYLES
             align-items: center;
             justify-content: flex-start;
             overflow-y: auto;
+            position: relative;
+        }
+
+        /* Add subtle pattern overlay to events section */
+        #events::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 75% 25%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 25% 75%, rgba(52, 152, 219, 0.05) 0%, transparent 50%);
+            z-index: 1;
+            pointer-events: none;
         }
 
         .events-container {
@@ -1681,6 +1674,8 @@ FROSTED GLASS MOBILE NAVBAR STYLES
             flex-direction: column;
             align-items: center;
             gap: 3rem;
+            position: relative;
+            z-index: 2;
         }
 
         .event-card {
@@ -1983,32 +1978,6 @@ FROSTED GLASS MOBILE NAVBAR STYLES
         ========================================
         */
         @media (max-width: 992px) {
-            /* ========================================
-MOBILE NAVBAR MEDIA QUERIES
-======================================== */
-@media (max-width: 992px) {
-    /* Hide PC navbar on mobile */
-    nav {
-        display: none;
-    }
-    
-    /* Hide PC register button on mobile */
-    #register-btn {
-        display: none;
-    }
-    
-    /* Show mobile navbar on mobile */
-    .mobile-nav {
-        display: block;
-    }
-}
-
-@media (min-width: 993px) {
-    /* Hide mobile navbar on PC */
-    .mobile-nav {
-        display: none;
-    }
-}
             .about-top {
                 flex-direction: column;
                 gap: 2rem;
@@ -2112,6 +2081,18 @@ MOBILE NAVBAR MEDIA QUERIES
             
             .event-content {
                 padding: 2rem;
+            }
+            
+            .section-header::before, .section-header::after {
+                width: 40px;
+            }
+            
+            .section-header::before {
+                margin-right: 15px;
+            }
+            
+            .section-header::after {
+                margin-left: 15px;
             }
         }
 
@@ -2258,6 +2239,18 @@ MOBILE NAVBAR MEDIA QUERIES
                 width: 80px;
                 height: 80px;
             }
+            
+            .section-header::before, .section-header::after {
+                width: 30px;
+            }
+            
+            .section-header::before {
+                margin-right: 10px;
+            }
+            
+            .section-header::after {
+                margin-left: 10px;
+            }
         }
 
         @media (max-width: 400px) {
@@ -2293,6 +2286,10 @@ MOBILE NAVBAR MEDIA QUERIES
             
             .event-details h2 {
                 font-size: 1.6rem;
+            }
+            
+            .section-header::before, .section-header::after {
+                width: 20px;
             }
         }
         
@@ -2524,14 +2521,17 @@ MOBILE NAVBAR MEDIA QUERIES
     }
     .contact-title { font-size: 2.3rem; }
 }
+.co-lead{
+    display: none;
+}
 </style>
 </head>
 <body>
 
-
     <div id="loader">
         <canvas id="binary-rain-canvas"></canvas>
     </div>
+
     <!-- Mobile Navbar -->
 <div class="mobile-nav">
     <div class="mobile-nav-container">
@@ -2560,6 +2560,7 @@ MOBILE NAVBAR MEDIA QUERIES
 
 <!-- Mobile Overlay -->
 <div class="mobile-overlay"></div>
+
     <nav>
         <ul aria-hidden="true" class="lit">
             <li>Home</li>
@@ -2623,20 +2624,20 @@ MOBILE NAVBAR MEDIA QUERIES
                     <div class="team-leader">
                         <img src="https://placehold.co/150x150" alt="Lead" class="team-leader-img">
                         <div class="team-leader-info">
-                            <h4>Sarah Johnson</h4>
+                            <h4>Arkodyuti Bhattacharyya</h4>
                             <p>Team Lead</p>
-                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                            <a href="https://in.linkedin.com/in/arkodyuti-bhattacharyya-132200318" class="linkedin-icon" target="_blank">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
-                    <div class="team-leader">
+                    <div class="team-leader co-lead">
                         <img src="https://placehold.co/150x150" alt="Co-Lead" class="team-leader-img">
                         <div class="team-leader-info">
                             <h4>Michael Chen</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2644,12 +2645,12 @@ MOBILE NAVBAR MEDIA QUERIES
                 <div class="team-members">
                     <h3>Team Members</h3>
                     <div class="members-list">
-                        <div class="member-item">Alex Rodriguez</div>
-                        <div class="member-item">Priya Patel</div>
-                        <div class="member-item">David Kim</div>
-                        <div class="member-item">Emily Wilson</div>
-                        <div class="member-item">James Brown</div>
-                        <div class="member-item">Sophia Garcia</div>
+                        <div class="member-item">Rohit Kumar</div>
+                        <div class="member-item">Tanmay Madam</div>
+                        <div class="member-item">Sania Shanty</div>
+                        <div class="member-item">Abhinav Gupta</div>
+                        <div class="member-item">Nakshatra Tomar</div>
+                        
                     </div>
                 </div>
             </div>
@@ -2674,7 +2675,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Dr. Robert Williams</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2684,7 +2685,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Lisa Thompson</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2720,7 +2721,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Jennifer Adams</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2730,7 +2731,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Brian Clark</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2765,7 +2766,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Emma Rodriguez</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2775,7 +2776,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Jason Miller</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2811,7 +2812,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Victoria Lewis</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2821,7 +2822,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Thomas Walker</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2856,7 +2857,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Daniel Roberts</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2866,7 +2867,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Megan Carter</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2903,7 +2904,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Ashley Baker</h4>
                             <p>Team Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2913,7 +2914,7 @@ MOBILE NAVBAR MEDIA QUERIES
                             <h4>Kevin Nelson</h4>
                             <p>Co-Lead</p>
                             <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -2953,7 +2954,7 @@ MOBILE NAVBAR MEDIA QUERIES
 
     </section>
 
-    <section id="about" class="full-screen-section">
+        <section id="about" class="full-screen-section">
         <!-- Three.js wave background container -->
         <div id="wave-background-container">
             <canvas id="wave-background"></canvas>
@@ -2963,9 +2964,10 @@ MOBILE NAVBAR MEDIA QUERIES
         <div class="about-content">
             <div class="about-top">
                 <div class="about-logo-container">
-                    <img src="csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
+                    <img src="media/csisaulogo.jpg" alt="CSI SAU Logo" class="about-logo">
                 </div>
                 <div class="about-text">
+                    <!-- Remove section-header class from About Us -->
                     <h2>About Us</h2>
                     <p>
                         The Computer Society of India (CSI) is the first and largest body of computer professionals in India. It was started on 6 March 1965 by a few computer professionals and has now grown to be the national body representing computer professionals, with 72 chapters, 511 student branches, and over 100,000 members. The purposes of the Society are scientific and educational, directed towards the advancement of the theory and practice of computer science and IT.
@@ -2974,14 +2976,14 @@ MOBILE NAVBAR MEDIA QUERIES
             </div>
             <div class="about-certificate-container">
                 <h3>Official Recognition</h3>
-                <img src="certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
+                <img src="media/certificate.jpg" alt="CSI SAU Certificate" class="about-certificate">
             </div>
         </div>
     </section>
 
-    <section id="team" class="full-screen-section dark-bg">
+    <section id="team" class="full-screen-section">
         <div class="team-container">
-            <h2>Our Team</h2>
+            <h2 class="section-header">Our Team</h2>
             
             <!-- Leadership Section -->
             <div class="team-category">
@@ -2997,8 +2999,8 @@ MOBILE NAVBAR MEDIA QUERIES
                         <div class="leadership-info">
                             <h4>Dr. Pranab Muhuri</h4>
                             <p>Dean</p>
-                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                            <a href="https://in.linkedin.com/in/pranab-muhuri-a5369221" class="linkedin-icon" target="_blank">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -3013,8 +3015,8 @@ MOBILE NAVBAR MEDIA QUERIES
                         <div class="leadership-info">
                             <h4>Dr. Reshma Rastogi</h4>
                             <p>Associate Dean</p>
-                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                            <a href="in.linkedin.com/in/dr-reshma-rastogi-nee-khemchandani-743716a?trk=people-guest_people_search-card" class="linkedin-icon" target="_blank">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -3035,8 +3037,8 @@ MOBILE NAVBAR MEDIA QUERIES
                         <div class="leadership-info">
                             <h4>Dr. Shashank Sheshar Singh</h4>
                             <p>Chief Branch Counsellor</p>
-                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                            <a href="in.linkedin.com/in/drshashankssingh" class="linkedin-icon" target="_blank">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -3051,8 +3053,8 @@ MOBILE NAVBAR MEDIA QUERIES
                         <div class="leadership-info">
                             <h4>Dr. Taniya Seth</h4>
                             <p>Faculty Advisor</p>
-                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                            <a href="https://in.linkedin.com/in/taniyaseth?trk=people-guest_people_search-card" class="linkedin-icon" target="_blank">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -3065,10 +3067,10 @@ MOBILE NAVBAR MEDIA QUERIES
                             </div>
                         </div>
                         <div class="leadership-info">
-                            <h4>Dr. Ashwini B</h4>
+                            <h4>Dr. Ashwini Bhamini</h4>
                             <p>Faculty Advisor</p>
-                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                            <a href="https://in.linkedin.com/in/ashwini-bhamini" class="linkedin-icon" target="_blank">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -3077,7 +3079,7 @@ MOBILE NAVBAR MEDIA QUERIES
             
             <!-- Student President -->
             <div class="team-category">
-                <h3>Student Leadership</h3>
+                <h3>The Crew</h3>
                 <div class="team-row">
                     <div class="leadership-card">
                         <div class="leadership-img">
@@ -3087,9 +3089,9 @@ MOBILE NAVBAR MEDIA QUERIES
                         </div>
                         <div class="leadership-info">
                             <h4>Shubham Yadav</h4>
-                            <p>Student President</p>
-                            <a href="https://linkedin.com" class="linkedin-icon" target="_blank">
-                                <img src="linkedinlogo.png" alt="LinkedIn">
+                            <p>Student Branch President</p>
+                            <a href="https://in.linkedin.com/in/shyadav1011" class="linkedin-icon" target="_blank">
+                                <img src="media/linkedinlogo.png" alt="LinkedIn">
                             </a>
                         </div>
                     </div>
@@ -3098,7 +3100,7 @@ MOBILE NAVBAR MEDIA QUERIES
             
             <!-- Teams Section -->
             <div class="team-category">
-                <h3>Our Teams</h3>
+                <!--<h3>Our Teams</h3> commented until further notice -->
                 <div class="team-cards-container">
                     <!-- Technical Team -->
                     <div class="team-card technical">
@@ -3231,9 +3233,9 @@ MOBILE NAVBAR MEDIA QUERIES
         </div>
     </section>
     
-    <section id="events" class="full-screen-section light-bg">
+    <section id="events" class="full-screen-section">
         <div class="events-container">
-            <h2>Events</h2>
+            <h2 class="section-header">Events</h2>
             
             <div class="event-card">
                 <div class="event-banner">
@@ -3686,7 +3688,7 @@ MOBILE NAVBAR MEDIA QUERIES
                     });
                 }
                 
-                
+                // FIXED: Contact section scroll trigger
                 const link = document.querySelector(`nav ul.content li a[href="#${section.id}"]`);
 
                 if (link) {
@@ -3694,10 +3696,22 @@ MOBILE NAVBAR MEDIA QUERIES
                         trigger: section,
                         start: "top 50%",   
                         end: "bottom 50%", 
-                        
-                       
                         onEnter: () => selectAnchor(link), 
-                        onEnterBack: () => selectAnchor(link), //moves navbar selection along while scrolling
+                        onEnterBack: () => selectAnchor(link),
+                        onLeave: () => {
+                            // Only update if we're scrolling past this section
+                            if (section.id !== 'contact') {
+                                const nextSection = document.querySelector(`nav ul.content li a[href="#${section.nextElementSibling?.id}"]`);
+                                if (nextSection) selectAnchor(nextSection);
+                            }
+                        },
+                        onLeaveBack: () => {
+                            // Only update if we're scrolling past this section
+                            if (section.id !== 'contact') {
+                                const prevSection = document.querySelector(`nav ul.content li a[href="#${section.previousElementSibling?.id}"]`);
+                                if (prevSection) selectAnchor(prevSection);
+                            }
+                        }
                     });
                 }
                 
@@ -4223,11 +4237,13 @@ MOBILE NAVBAR MEDIA QUERIES
                 let leftEyebrow, rightEyebrow; // Eyebrow variables
                 
                 const clock = new THREE.Clock();
+                // FIXED: Make mouse tracking global for the whole page
                 const mousePos = new THREE.Vector2();
                 
                 let leftPupilInitialPos = new THREE.Vector3();
                 let rightPupilInitialPos = new THREE.Vector3();
-                const maxPupilMove = 0.08; 
+                // FIXED: Increased movement range for more pronounced effect
+                const maxPupilMove = 0.15; 
 
                 // --- Texture Helper Functions ---
                 function createGradientTexture(colorCenter, colorEdge) {
@@ -4292,10 +4308,9 @@ MOBILE NAVBAR MEDIA QUERIES
 
                     createBear();
 
-                    // Add event listeners to the event card for mouse interaction
-                    const eventCard = document.querySelector('.event-card');
-                    eventCard.addEventListener('mousemove', onDocumentMouseMove);
-                    eventCard.addEventListener('mouseleave', onMouseLeave);
+                    // FIXED: Add event listeners to the whole document for mouse interaction
+                    document.addEventListener('mousemove', onDocumentMouseMove);
+                    document.addEventListener('mouseleave', onMouseLeave);
 
                     animate();
                 }
@@ -4453,9 +4468,9 @@ MOBILE NAVBAR MEDIA QUERIES
 
                 // --- Event Handlers (Global) ---
                 function onDocumentMouseMove(event) {
-                    const rect = document.querySelector('.event-card').getBoundingClientRect();
-                    mousePos.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-                    mousePos.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                    // FIXED: Track mouse position relative to the whole window
+                    mousePos.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mousePos.y = - (event.clientY / window.innerHeight) * 2 + 1;
                 }
 
                 function onMouseLeave(event) {
@@ -4493,7 +4508,8 @@ MOBILE NAVBAR MEDIA QUERIES
 
                     // 3. Head Tilt
                     if (bearHeadGroup) {
-                        const maxHeadTilt = 0.08;
+                        // FIXED: Increased head tilt range for more pronounced effect
+                        const maxHeadTilt = 0.15;
                         const targetRotationX = -mousePos.y * maxHeadTilt;
                         const targetRotationY = mousePos.x * maxHeadTilt; 
 
@@ -4552,73 +4568,61 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-// Enhanced Mobile Navbar Toggle Functionality
+
+
+// Professional Mobile Navbar Functionality
 const hamburger = document.querySelector('.hamburger-menu');
 const mobileMenu = document.querySelector('.mobile-menu');
 const overlay = document.querySelector('.mobile-overlay');
 const mobileLinks = document.querySelectorAll('.mobile-menu a');
 const mobileRegisterBtn = document.querySelector('.mobile-register-btn');
 
-// Toggle mobile menu with enhanced animations
+// Toggle mobile menu
 if (hamburger) {
     hamburger.addEventListener('click', function() {
         this.classList.toggle('active');
         mobileMenu.classList.toggle('active');
         overlay.classList.toggle('active');
         
-        // Add body scroll lock when menu is open
-        if (mobileMenu.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
     });
 }
 
-// Close mobile menu when clicking on overlay
-if (overlay) {
-    overlay.addEventListener('click', function() {
-        closeMobileMenu();
-    });
-}
-
-// Close mobile menu when clicking on a link
-mobileLinks.forEach(link => {
-    link.addEventListener('click', function() {
-        closeMobileMenu();
-    });
-});
-
-// Mobile register button functionality
-if (mobileRegisterBtn) {
-    mobileRegisterBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        // Use the same modal functionality as PC register button
-        const registerBtn = document.getElementById('register-btn');
-        if (registerBtn) {
-            registerBtn.click(); // Trigger the PC register button click
-        }
-        
-        closeMobileMenu();
-    });
-}
-
-// Function to close mobile menu
+// Close menu functions
 function closeMobileMenu() {
-    if (hamburger) hamburger.classList.remove('active');
-    if (mobileMenu) mobileMenu.classList.remove('active');
-    if (overlay) overlay.classList.remove('active');
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    overlay.classList.remove('active');
     document.body.style.overflow = '';
 }
 
-// Close menu with ESC key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
+// Close on overlay click
+if (overlay) {
+    overlay.addEventListener('click', closeMobileMenu);
+}
+
+// Close on link click
+mobileLinks.forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+});
+
+// Mobile register button
+if (mobileRegisterBtn) {
+    mobileRegisterBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const registerBtn = document.getElementById('register-btn');
+        if (registerBtn) registerBtn.click();
         closeMobileMenu();
-    }
+    });
+}
+
+// Close with ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeMobileMenu();
 });
 </script>
 
 
 </body>
-</html> 
+</html>
